@@ -384,7 +384,7 @@ CommandLine::fetchContentRect()
 		return QRectF(rx.cap(1).toFloat(), rx.cap(2).toFloat(), rx.cap(3).toFloat(), rx.cap(4).toFloat());
 	}
 
-	std::cout << "invalid --content-box=" << m_options.value("content-box").toAscii().constData() << "\n";
+    std::cout << "invalid --content-box=" << m_options.value("content-box").toLatin1().constData() << "\n";
 	exit(1);
 }
 
@@ -405,7 +405,7 @@ CommandLine::fetchOrientation()
 	} else if (cli_orient == "upsidedown") {
 		orient = UPSIDEDOWN;
 	} else {
-		std::cout << "Wrong orientation " << m_options.value("orientation").toAscii().constData() << "\n";
+        std::cout << "Wrong orientation " << m_options.value("orientation").toLatin1().constData() << "\n";
 		exit(1);
 	}
 

@@ -1,11 +1,12 @@
 TEMPLATE = app
 TARGET = name_of_the_app
 
-QT = core gui
+QT = core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 HEADERS += \
+	AbstractCommand.h \
 	AbstractRelinker.h \
 	CommandLine.h \
 	DebugImages.h \
@@ -78,6 +79,7 @@ SOURCES += \
 	imageproc\ConnectivityMap.cpp \
 	imageproc\Constants.cpp \
 	imageproc\InfluenceMap.cpp \
+	main.cpp \
 	OrthogonalRotation.cpp \
 	PageId.cpp \
 	PageInfo.cpp \

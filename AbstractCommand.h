@@ -19,8 +19,8 @@
 #ifndef ABSTRACTCOMMAND_H_
 #define ABSTRACTCOMMAND_H_
 
-#include "RefCountable.h"
-#include "IntrusivePtr.h"
+#include "foundation/RefCountable.h"
+#include "foundation/IntrusivePtr.h"
 
 template<typename R>
 class AbstractCommand0 : public RefCountable
