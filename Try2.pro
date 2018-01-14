@@ -4,10 +4,12 @@ TARGET = name_of_the_app
 QT = core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+INCLUDEPATH = E:/Asepsis/ScanTailor/boost_1_66_0
 
 HEADERS += \
 	AbstractCommand.h \
 	AbstractRelinker.h \
+	AtomicFileOverwriter.h \
 	CommandLine.h \
 	DebugImages.h \
 	Despeckle.h \
@@ -28,9 +30,12 @@ HEADERS += \
 	foundation\IntrusivePtr.h \
 	foundation\NonCopyable.h \
 	foundation\RefCountable.h \
+	foundation\VirtualFunction.h \
 	ImageFileInfo.h \
 	ImageId.h \
+	ImageLoader.h \
 	ImageMetadata.h \
+	ImageMetadataLoader.h \
 	imageproc\BinaryImage.h \
 	imageproc\BinaryThreshold.h \
 	imageproc\BitOps.h \
@@ -39,9 +44,14 @@ HEADERS += \
 	imageproc\Connectivity.h \
 	imageproc\ConnectivityMap.h \
 	imageproc\Constants.h \
+	imageproc\GrayImage.h \
+	imageproc\Grayscale.h \
 	imageproc\InfluenceMap.h \
+	imageproc\NonCopyable.h \
+	imageproc\Scale.h \
 	Margins.h \
 	OrthogonalRotation.h \
+	OutOfMemoryHandler.h \
 	PageId.h \
 	PageInfo.h \
 	PageSequence.h \
@@ -55,6 +65,7 @@ HEADERS += \
 	XmlUnmarshaller.h
 
 SOURCES += \
+	AtomicFileOverwriter.cpp \
 	CommandLine.cpp \
 	DebugImages.cpp \
 	Despeckle.cpp \
@@ -73,14 +84,20 @@ SOURCES += \
 	foundation\AutoRemovingFile.cpp \
 	ImageFileInfo.cpp \
 	ImageId.cpp \
+	ImageLoader.cpp \
 	ImageMetadata.cpp \
+	ImageMetadataLoader.cpp \
 	imageproc\BinaryImage.cpp \
 	imageproc\BitOps.cpp \
 	imageproc\ConnectivityMap.cpp \
 	imageproc\Constants.cpp \
+	imageproc\GrayImage.cpp \
+	imageproc\Grayscale.cpp \
 	imageproc\InfluenceMap.cpp \
+	imageproc\Scale.cpp \
 	main.cpp \
 	OrthogonalRotation.cpp \
+	OutOfMemoryHandler.cpp \
 	PageId.cpp \
 	PageInfo.cpp \
 	PageSequence.cpp \
