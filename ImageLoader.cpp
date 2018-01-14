@@ -17,7 +17,7 @@
 */
 
 #include "ImageLoader.h"
-#include "TiffReader.h"
+//#include "TiffReader.h"
 #include "ImageId.h"
 #include <QImage>
 #include <QString>
@@ -43,9 +43,11 @@ ImageLoader::load(QString const& file_path, int const page_num)
 QImage
 ImageLoader::load(QIODevice& io_dev, int const page_num)
 {
-	if (TiffReader::canRead(io_dev)) {
+    /*
+    if (TiffReader::canRead(io_dev)) {
 		return TiffReader::readImage(io_dev, page_num);
 	}
+    */
 	
 	if (page_num != 0) {
 		// Qt can only load the first page of multi-page images.

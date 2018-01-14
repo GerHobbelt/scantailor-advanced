@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma comment(lib, "Ws2_32.lib")
+
 #include "BinaryImage.h"
 #include "ByteOrder.h"
 #include "BitOps.h"
