@@ -1110,7 +1110,7 @@ BinaryImage::leftmostBitOffset(
 		}
 	}
 	
-    return min(bit_offset, offset_limit);
+    return std::min(bit_offset, offset_limit);
 }
 
 int
@@ -1130,7 +1130,7 @@ BinaryImage::rightmostBitOffset(
 		}
 	}
 	
-    return min(bit_offset, offset_limit);
+    return std::min(bit_offset, offset_limit);
 }
 
 bool operator==(BinaryImage const& lhs, BinaryImage const& rhs)
