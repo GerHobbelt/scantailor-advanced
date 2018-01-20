@@ -574,4 +574,3 @@ PolygonRasterizer::Rasterizer::fillBinarySegment(
 }
 
 } // namespace imageproc
-

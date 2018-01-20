@@ -19,8 +19,8 @@
 #ifndef DEWARPING_TOWARDS_LINE_TRACER_H_
 #define DEWARPING_TOWARDS_LINE_TRACER_H_
 
-#include "VecNT.h"
-#include "Grid.h"
+#include "../foundation/VecNT.h"
+#include "../foundation/Grid.h"
 #include <QPoint>
 #include <QRect>
 #include <QLineF>

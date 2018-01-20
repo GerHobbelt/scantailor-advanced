@@ -19,7 +19,7 @@
 #include "ZoneDefaultInteraction.h"
 #include "ZoneInteractionContext.h"
 #include "EditableZoneSet.h"
-#include "ImageViewBase.h"
+#include "../imageproc/ImageViewBase.h"
 #include <QTransform>
 #include <QPolygon>
 #include <QPointF>

@@ -17,8 +17,8 @@
 */
 
 #include "DraggableLineSegment.h"
-#include "Proximity.h"
-#include "ImageViewBase.h"
+#include "../foundation/Proximity.h"
+#include "../imageproc/ImageViewBase.h"
 #include <QPainter>
 #include <QTransform>
 #include <QRectF>
@@ -53,4 +53,3 @@ DraggableLineSegment::dragContinuation(QPointF const& mouse_pos)
 {
 	lineSegmentMoveRequest(m_initialLinePos.translated(mouse_pos - m_initialMousePos));
 }
-

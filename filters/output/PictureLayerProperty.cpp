@@ -17,7 +17,7 @@
 */
 
 #include "PictureLayerProperty.h"
-#include "PropertyFactory.h"
+#include "../../foundation/PropertyFactory.h"
 #include <QDomDocument>
 #include <QDomDocument>
 #include <QString>

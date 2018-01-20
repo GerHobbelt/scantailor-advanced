@@ -22,12 +22,12 @@
 #include "OptimizationResult.h"
 #include "FittableSpline.h"
 #include "SqDistApproximant.h"
-#include "VirtualFunction.h"
-#include "VecNT.h"
-#include "MatT.h"
-#include "VecT.h"
-#include "LinearFunction.h"
-#include "QuadraticFunction.h"
+#include "../../foundation/VirtualFunction.h"
+#include "../../foundation/VecNT.h"
+#include "../../foundation/MatT.h"
+#include "../../foundation/VecT.h"
+#include "../../math/LinearFunction.h"
+#include "../../math/QuadraticFunction.h"
 #include <vector>
 #include <list>
 

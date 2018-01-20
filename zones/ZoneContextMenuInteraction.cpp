@@ -17,11 +17,10 @@
 */
 
 #include "ZoneContextMenuInteraction.h"
-#include "ZoneContextMenuInteraction.h.moc"
 #include "ZoneInteractionContext.h"
-#include "ImageViewBase.h"
+#include "../imageproc/ImageViewBase.h"
 #include "EditableZoneSet.h"
-#include "QtSignalForwarder.h"
+#include "../foundation/QtSignalForwarder.h"
 #include <QRectF>
 #include <QPolygonF>
 #include <QMenu>

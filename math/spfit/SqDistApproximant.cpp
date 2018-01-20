@@ -18,7 +18,7 @@
 
 #include "SqDistApproximant.h"
 #include "FrenetFrame.h"
-#include "MatrixCalc.h"
+#include "../../math/MatrixCalc.h"
 #include <limits>
 #include <assert.h>
 #include <math.h>

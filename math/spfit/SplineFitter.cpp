@@ -21,7 +21,7 @@
 #include "Optimizer.h"
 #include "ConstraintSet.h"
 #include "ModelShape.h"
-#include "VirtualFunction.h"
+#include "../../foundation/VirtualFunction.h"
 #include <boost/foreach.hpp>
 #include <stdexcept>
 

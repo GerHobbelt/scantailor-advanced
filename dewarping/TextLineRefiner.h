@@ -19,8 +19,8 @@
 #ifndef DEWARPING_TEXT_LINE_REFINER_H_
 #define DEWARPING_TEXT_LINE_REFINER_H_
 
-#include "Grid.h"
-#include "VecNT.h"
+#include "../foundation/Grid.h"
+#include "../foundation/VecNT.h"
 #include "Dpi.h"
 #include "imageproc/GrayImage.h"
 #include <QPointF>

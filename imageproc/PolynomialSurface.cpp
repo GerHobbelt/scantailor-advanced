@@ -18,7 +18,7 @@
 
 #include "PolynomialSurface.h"
 #include "LeastSquaresFit.h"
-#include "AlignedArray.h"
+#include "../foundation/AlignedArray.h"
 #include "BinaryImage.h"
 #include "GrayImage.h"
 #include "Grayscale.h"

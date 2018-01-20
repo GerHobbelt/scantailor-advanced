@@ -19,14 +19,14 @@
 #ifndef MATRIX_CALC_H_
 #define MATRIX_CALC_H_
 
-#include "NonCopyable.h"
-#include "StaticPool.h"
-#include "DynamicPool.h"
+#include "../foundation/NonCopyable.h"
+#include "../foundation/StaticPool.h"
+#include "../foundation/DynamicPool.h"
 #include "LinearSolver.h"
-#include "MatMNT.h"
-#include "MatT.h"
-#include "VecNT.h"
-#include "VecT.h"
+#include "../foundation/MatMNT.h"
+#include "../foundation/MatT.h"
+#include "../foundation/VecNT.h"
+#include "../foundation/VecT.h"
 #include <stddef.h>
 #include <assert.h>
 

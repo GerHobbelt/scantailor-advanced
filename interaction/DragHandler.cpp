@@ -17,7 +17,7 @@
 */
 
 #include "DragHandler.h"
-#include "ImageViewBase.h"
+#include "../imageproc/ImageViewBase.h"
 #include <QMouseEvent>
 #include <QPointF>
 #include <QPoint>

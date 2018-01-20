@@ -19,7 +19,7 @@
 #ifndef OBJECT_DRAG_HANDLER_H_
 #define OBJECT_DRAG_HANDLER_H_
 
-#include "NonCopyable.h"
+#include "../foundation/NonCopyable.h"
 #include "InteractionHandler.h"
 #include "InteractionState.h"
 #include "DraggableObject.h"

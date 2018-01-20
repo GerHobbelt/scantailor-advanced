@@ -20,7 +20,7 @@
 #define DRAGGABLE_OBJECT_H_
 
 #include "InteractionState.h"
-#include "Proximity.h"
+#include "../foundation/Proximity.h"
 #include <boost/function.hpp>
 
 class ObjectDragHandler;

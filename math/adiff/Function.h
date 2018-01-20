@@ -20,8 +20,8 @@
 #define ADIFF_FUNCTION_H_
 
 #include "SparseMap.h"
-#include "MatT.h"
-#include "VecT.h"
+#include "../../foundation/MatT.h"
+#include "../../foundation/VecT.h"
 #include <stddef.h>
 
 namespace adiff

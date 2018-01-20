@@ -28,8 +28,8 @@
 #include "dewarping/DistortionModel.h"
 #include "Dpi.h"
 #include "Dpm.h"
-#include "Zone.h"
-#include "ZoneSet.h"
+#include "../../zones/Zone.h"
+#include "../../zones/ZoneSet.h"
 #include "PictureLayerProperty.h"
 #include "FillColorProperty.h"
 #include "dewarping/CylindricalSurfaceDewarper.h"
@@ -60,7 +60,6 @@
 #include "imageproc/PolygonRasterizer.h"
 #include "imageproc/ConnectivityMap.h"
 #include "imageproc/InfluenceMap.h"
-#include "config.h"
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>

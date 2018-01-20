@@ -19,8 +19,8 @@
 #ifndef SQDIST_APPROXIMANT_H_
 #define SQDIST_APPROXIMANT_H_
 
-#include "VecNT.h"
-#include "MatMNT.h"
+#include "../../foundation/VecNT.h"
+#include "../../foundation/MatMNT.h"
 #include <QLineF>
 
 namespace spfit

@@ -17,18 +17,16 @@
 */
 
 #include "ImageViewBase.h"
-#include "ImageViewBase.h.moc"
-#include "NonCopyable.h"
+#include "../foundation/NonCopyable.h"
 #include "ImagePresentation.h"
 #include "OpenGLSupport.h"
 #include "PixmapRenderer.h"
 #include "BackgroundExecutor.h"
 #include "Dpm.h"
 #include "Dpi.h"
-#include "ScopedIncDec.h"
+#include "../foundation/ScopedIncDec.h"
 #include "imageproc/PolygonUtils.h"
 #include "imageproc/Transform.h"
-#include "config.h"
 #include <QScrollBar>
 #include <QPointer>
 #include <QAtomicInt>

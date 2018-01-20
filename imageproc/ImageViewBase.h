@@ -20,9 +20,9 @@
 #define IMAGEVIEWBASE_H_
 
 #include "Margins.h"
-#include "IntrusivePtr.h"
-#include "InteractionHandler.h"
-#include "InteractionState.h"
+#include "../foundation/IntrusivePtr.h"
+#include "../interaction/InteractionHandler.h"
+#include "../interaction/InteractionState.h"
 #include "ImagePixmapUnion.h"
 #include <QTimer>
 #include <QWidget>

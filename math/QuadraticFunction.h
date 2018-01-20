@@ -19,8 +19,8 @@
 #ifndef QUADRATIC_FUNCTION_H_
 #define QUADRATIC_FUNCTION_H_
 
-#include "MatT.h"
-#include "VecT.h"
+#include "../foundation/MatT.h"
+#include "../foundation/VecT.h"
 #include <stddef.h>
 
 /**

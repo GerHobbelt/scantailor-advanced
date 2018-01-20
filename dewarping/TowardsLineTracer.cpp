@@ -17,9 +17,9 @@
 */
 
 #include "TowardsLineTracer.h"
-#include "SidesOfLine.h"
-#include "ToLineProjector.h"
-#include "NumericTraits.h"
+#include "../math/SidesOfLine.h"
+#include "../math/ToLineProjector.h"
+#include "../foundation/NumericTraits.h"
 #include "imageproc/SEDM.h"
 #include <QRect>
 #include <QtGlobal>

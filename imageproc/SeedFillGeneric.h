@@ -20,7 +20,7 @@
 #define IMAGEPROC_SEEDFILL_GENERIC_H_
 
 #include "Connectivity.h"
-#include "FastQueue.h"
+#include "../foundation/FastQueue.h"
 #include <QSize>
 #include <vector>
 #include <assert.h>

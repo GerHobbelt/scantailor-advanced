@@ -19,7 +19,7 @@
 #include "Curve.h"
 #include "XmlMarshaller.h"
 #include "XmlUnmarshaller.h"
-#include "VecNT.h"
+#include "../foundation/VecNT.h"
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
 #endif
@@ -222,4 +222,3 @@ Curve::splineHasLoops(XSpline const& spline)
 }
 
 } // namespace dewarping
-

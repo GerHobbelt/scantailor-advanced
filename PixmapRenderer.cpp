@@ -17,7 +17,6 @@
 */
 
 #include "PixmapRenderer.h"
-#include "config.h"
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>

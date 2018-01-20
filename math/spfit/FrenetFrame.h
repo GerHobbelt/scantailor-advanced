@@ -19,7 +19,7 @@
 #ifndef SPFIT_FRENET_FRAME_H_
 #define SPFIT_FRENET_FRAME_H_
 
-#include "VecNT.h"
+#include "../../foundation/VecNT.h"
 
 namespace spfit
 {

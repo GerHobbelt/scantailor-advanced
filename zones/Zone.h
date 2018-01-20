@@ -20,8 +20,8 @@
 #define ZONE_H_
 
 #include "SerializableSpline.h"
-#include "IntrusivePtr.h"
-#include "PropertySet.h"
+#include "../foundation/IntrusivePtr.h"
+#include "../foundation/PropertySet.h"
 
 class PropertyFactory;
 class QDomDocument;
@@ -32,7 +32,7 @@ class Zone
 {
 	// Member-wise copying is OK, but that will produce a partly shallow copy.
 public:
-	Zone(SerializableSpline const& spline, PropertySet const& props = PropertySet());
+    Zone(SerializableSpline const& spline, PropertySet const& props = PropertySet());
 	
 	Zone(QDomElement const& el, PropertyFactory const& prop_factory);
 	

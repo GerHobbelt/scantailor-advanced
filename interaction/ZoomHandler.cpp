@@ -18,7 +18,7 @@
 
 #include "ZoomHandler.h"
 #include "InteractionState.h"
-#include "ImageViewBase.h"
+#include "../imageproc/ImageViewBase.h"
 #include <QWheelEvent>
 #include <QKeyEvent>
 #include <QRectF>
@@ -112,4 +112,3 @@ ZoomHandler::onKeyPressEvent(QKeyEvent* event, InteractionState& interaction)
 	m_rImageView.setWidgetFocalPointWithoutMoving(focus_point);
 	m_rImageView.setZoomLevel(zoom); // this will call update()
 }
-

@@ -19,9 +19,9 @@
 #ifndef DEWARPING_CYLINDRICAL_SURFACE_DEWARPER_H_
 #define DEWARPING_CYLINDRICAL_SURFACE_DEWARPER_H_
 
-#include "HomographicTransform.h"
-#include "PolylineIntersector.h"
-#include "ArcLengthMapper.h"
+#include "../math/HomographicTransform.h"
+#include "../math/PolylineIntersector.h"
+#include "../math/ArcLengthMapper.h"
 #ifndef Q_MOC_RUN
 #include <boost/array.hpp>
 #endif

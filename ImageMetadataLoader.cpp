@@ -58,4 +58,3 @@ ImageMetadataLoader::loadImpl(
 	}
 	return loadImpl(file, out);
 }
-

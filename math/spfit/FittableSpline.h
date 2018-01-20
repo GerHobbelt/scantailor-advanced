@@ -19,9 +19,9 @@
 #ifndef SPFIT_FITTABLE_SPLINE_H_
 #define SPFIT_FITTABLE_SPLINE_H_
 
-#include "VirtualFunction.h"
-#include "NumericTraits.h"
-#include "FlagOps.h"
+#include "../../foundation/VirtualFunction.h"
+#include "../../foundation/NumericTraits.h"
+#include "../../foundation/FlagOps.h"
 #include <QPointF>
 #include <vector>
 

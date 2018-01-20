@@ -17,7 +17,6 @@
 */
 
 #include "OpenGLSupport.h"
-#include "config.h"
 #include <QSettings>
 #ifdef ENABLE_OPENGL
 #include <QGLFormat>

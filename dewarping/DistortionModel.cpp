@@ -18,8 +18,8 @@
 
 #include "DistortionModel.h"
 #include "CylindricalSurfaceDewarper.h"
-#include "NumericTraits.h"
-#include "VecNT.h"
+#include "../foundation/NumericTraits.h"
+#include "../foundation/VecNT.h"
 #include <QRectF>
 #include <QPointF>
 #include <QTransform>

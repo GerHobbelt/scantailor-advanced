@@ -19,7 +19,7 @@
 #ifndef LINEAR_FUNCTION_H_
 #define LINEAR_FUNCTION_H_
 
-#include "VecT.h"
+#include "../foundation/VecT.h"
 #include <stddef.h>
 
 /**

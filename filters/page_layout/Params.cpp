@@ -63,4 +63,3 @@ Params::toXml(QDomDocument& doc, QString const& name) const
 }
 
 } // namespace page_layout
-

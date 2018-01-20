@@ -18,7 +18,7 @@
 
 #include "InteractionHandler.h"
 #include "InteractionState.h"
-#include "NonCopyable.h"
+#include "../foundation/NonCopyable.h"
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMouseEvent>

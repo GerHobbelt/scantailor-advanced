@@ -17,10 +17,10 @@
 */
 
 #include "CylindricalSurfaceDewarper.h"
-#include "ToLineProjector.h"
-#include "MatrixCalc.h"
-#include "VecNT.h"
-#include "NumericTraits.h"
+#include "../math/ToLineProjector.h"
+#include "../math/MatrixCalc.h"
+#include "../foundation/VecNT.h"
+#include "../foundation/NumericTraits.h"
 #include <QLineF>
 #include <QtGlobal>
 #include <QDebug>

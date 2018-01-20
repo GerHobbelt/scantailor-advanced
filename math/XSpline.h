@@ -21,8 +21,8 @@
 
 #include "spfit/FittableSpline.h"
 #include "QuadraticFunction.h"
-#include "VirtualFunction.h"
-#include "NumericTraits.h"
+#include "../foundation/VirtualFunction.h"
+#include "../foundation/NumericTraits.h"
 #include <QPointF>
 #include <QLineF>
 #include <vector>

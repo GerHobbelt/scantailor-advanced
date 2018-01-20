@@ -19,8 +19,8 @@
 #ifndef LINEAR_SOLVER_H_
 #define LINEAR_SOLVER_H_
 
-#include "NonCopyable.h"
-#include "StaticPool.h"
+#include "../foundation/NonCopyable.h"
+#include "../foundation/StaticPool.h"
 #include <cmath>
 #include <limits>
 #include <stdexcept>

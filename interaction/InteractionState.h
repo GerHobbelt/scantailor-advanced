@@ -19,8 +19,8 @@
 #ifndef INTERACTION_STATE_H_
 #define INTERACTION_STATE_H_
 
-#include "NonCopyable.h"
-#include "Proximity.h"
+#include "../foundation/NonCopyable.h"
+#include "../foundation/Proximity.h"
 #ifndef Q_MOC_RUN
 #include <boost/intrusive/list.hpp>
 #endif

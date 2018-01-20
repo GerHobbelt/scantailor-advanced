@@ -19,7 +19,7 @@
 #ifndef SPFIT_CONSTRAINT_SET_H_
 #define SPFIT_CONSTRAINT_SET_H_
 
-#include "LinearFunction.h"
+#include "../../math/LinearFunction.h"
 #include <QPointF>
 #include <QLineF>
 #include <list>

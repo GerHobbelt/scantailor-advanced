@@ -19,8 +19,8 @@
 #ifndef OUTPUT_PICTURE_LAYER_PROPERTY_H_
 #define OUTPUT_PICTURE_LAYER_PROPERTY_H_
 
-#include "Property.h"
-#include "IntrusivePtr.h"
+#include "../../foundation/Property.h"
+#include "../../foundation/IntrusivePtr.h"
 
 class PropertyFactory;
 class QDomDocument;

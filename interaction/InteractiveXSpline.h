@@ -19,11 +19,11 @@
 #ifndef INTERACTIVE_XSPLINE_H_
 #define INTERACTIVE_XSPLINE_H_
 
-#include "XSpline.h"
+#include "../math/XSpline.h"
 #include "DraggablePoint.h"
 #include "ObjectDragHandler.h"
 #include "InteractionState.h"
-#include "VecNT.h"
+#include "../foundation/VecNT.h"
 #include <QPointF>
 #include <QCoreApplication>
 #ifndef Q_MOC_RUN

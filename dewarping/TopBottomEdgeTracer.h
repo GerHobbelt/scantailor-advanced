@@ -19,8 +19,8 @@
 #ifndef DEWARPING_TOP_BOTTOM_EDGE_TRACER_H_
 #define DEWARPING_TOP_BOTTOM_EDGE_TRACER_H_
 
-#include "Grid.h"
-#include "VecNT.h"
+#include "../foundation/Grid.h"
+#include "../foundation/VecNT.h"
 #include <QPointF>
 #include <QLineF>
 #include <QRectF>

@@ -18,7 +18,7 @@
 
 #include "LineBoundedByRect.h"
 #include "LineIntersectionScalar.h"
-#include "NumericTraits.h"
+#include "../foundation/NumericTraits.h"
 #include <boost/foreach.hpp>
 
 bool lineBoundedByRect(QLineF& line, QRectF const& rect)

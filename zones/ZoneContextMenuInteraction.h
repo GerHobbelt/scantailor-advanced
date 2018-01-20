@@ -20,12 +20,12 @@
 #define ZONE_CONTEXT_MENU_INTERACTION_H_
 
 #include "ZoneContextMenuItem.h"
-#include "InteractionHandler.h"
-#include "InteractionState.h"
+#include "../interaction/InteractionHandler.h"
+#include "../interaction/InteractionState.h"
 #include "EditableSpline.h"
 #include "EditableZoneSet.h"
-#include "PropertySet.h"
-#include "IntrusivePtr.h"
+#include "../foundation/PropertySet.h"
+#include "../foundation/IntrusivePtr.h"
 #include "BasicSplineVisualizer.h"
 #include <QObject>
 #include <QColor>

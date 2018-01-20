@@ -21,8 +21,8 @@
 #define EDITABLE_ZONE_SET_H_
 
 #include "EditableSpline.h"
-#include "PropertySet.h"
-#include "IntrusivePtr.h"
+#include "../foundation/PropertySet.h"
+#include "../foundation/IntrusivePtr.h"
 #include <QObject>
 #ifndef Q_MOC_RUN
 #include <boost/mpl/bool.hpp>

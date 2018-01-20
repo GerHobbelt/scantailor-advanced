@@ -19,8 +19,8 @@
 #ifndef BACKGROUNDEXECUTOR_H_
 #define BACKGROUNDEXECUTOR_H_
 
-#include "NonCopyable.h"
-#include "IntrusivePtr.h"
+#include "foundation/NonCopyable.h"
+#include "foundation/IntrusivePtr.h"
 #include "AbstractCommand.h"
 #include "PayloadEvent.h"
 #include <memory>

@@ -31,4 +31,3 @@ ImageFileInfo::isDpiOK() const
 		!bind(&ImageMetadata::isDpiOK, _1)
 	) == m_imageInfo.end();
 }
-

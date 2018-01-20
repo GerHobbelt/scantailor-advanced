@@ -20,8 +20,8 @@
 #ifndef EDITABLE_SPLINE_H_
 #define EDITABLE_SPLINE_H_
 
-#include "RefCountable.h"
-#include "IntrusivePtr.h"
+#include "../foundation/RefCountable.h"
+#include "../foundation/IntrusivePtr.h"
 #include "SplineVertex.h"
 #include "SplineSegment.h"
 #include <QPolygonF>

@@ -22,7 +22,7 @@
 #ifndef IMAGEPROC_GAUSSBLUR_H_
 #define IMAGEPROC_GAUSSBLUR_H_
 
-#include "ValueConv.h"
+#include "../foundation/ValueConv.h"
 #include <QSize>
 #ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>

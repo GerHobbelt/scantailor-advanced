@@ -19,9 +19,9 @@
 #ifndef INTERACTION_HANDLER_H_
 #define INTERACTION_HANDLER_H_
 
-#include "NonCopyable.h"
-#include "RefCountable.h"
-#include "IntrusivePtr.h"
+#include "../foundation/NonCopyable.h"
+#include "../foundation/RefCountable.h"
+#include "../foundation/IntrusivePtr.h"
 #include <boost/intrusive/list.hpp>
 
 class InteractionState;

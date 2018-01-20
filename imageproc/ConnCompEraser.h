@@ -19,7 +19,7 @@
 #ifndef IMAGEPROC_CONNCOMPERASER_H_
 #define IMAGEPROC_CONNCOMPERASER_H_
 
-#include "NonCopyable.h"
+#include "../foundation/NonCopyable.h"
 #include "Connectivity.h"
 #include "ConnComp.h"
 #include "BinaryImage.h"

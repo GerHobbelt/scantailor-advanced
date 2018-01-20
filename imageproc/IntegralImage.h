@@ -19,7 +19,7 @@
 #ifndef IMAGEPROC_INTEGRALIMAGE_H_
 #define IMAGEPROC_INTEGRALIMAGE_H_
 
-#include "NonCopyable.h"
+#include "../foundation/NonCopyable.h"
 #include <QSize>
 #include <QRect>
 #include <new>

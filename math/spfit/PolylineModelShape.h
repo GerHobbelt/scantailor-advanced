@@ -19,12 +19,12 @@
 #ifndef SPFIT_POLYLINE_MODEL_SHAPE_H_
 #define SPFIT_POLYLINE_MODEL_SHAPE_H_
 
-#include "NonCopyable.h"
+#include "../../foundation/NonCopyable.h"
 #include "ModelShape.h"
 #include "SqDistApproximant.h"
-#include "XSpline.h"
-#include "VecNT.h"
-#include "FlagOps.h"
+#include "../../math/XSpline.h"
+#include "../../foundation/VecNT.h"
+#include "../../foundation/FlagOps.h"
 #include <QPointF>
 #include <vector>
 

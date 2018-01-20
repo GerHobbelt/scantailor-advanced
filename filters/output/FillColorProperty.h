@@ -19,8 +19,8 @@
 #ifndef OUTPUT_FILL_COLOR_PROPERTY_H_
 #define OUTPUT_FILL_COLOR_PROPERTY_H_
 
-#include "Property.h"
-#include "IntrusivePtr.h"
+#include "../../foundation/Property.h"
+#include "../../foundation/IntrusivePtr.h"
 #include <QColor>
 #include <Qt>
 

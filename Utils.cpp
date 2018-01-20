@@ -85,4 +85,3 @@ Utils::createThumbnailCache(QString const& output_dir)
 		new ThumbnailPixmapCache(thumbs_cache_path, max_pixmap_size, 40, 5)
 	);
 }
-

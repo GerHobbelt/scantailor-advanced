@@ -19,7 +19,7 @@
 #ifndef POLYLINE_INTERSECTOR_H_
 #define POLYLINE_INTERSECTOR_H_
 
-#include "VecNT.h"
+#include "../foundation/VecNT.h"
 #include <QPointF>
 #include <QLineF>
 #include <vector>

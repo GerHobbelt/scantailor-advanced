@@ -19,8 +19,8 @@
 #ifndef SPLINE_VERTEX_H_
 #define SPLINE_VERTEX_H_
 
-#include "IntrusivePtr.h"
-#include "NonCopyable.h"
+#include "../foundation/IntrusivePtr.h"
+#include "../foundation/NonCopyable.h"
 #include <QPointF>
 
 class SplineVertex

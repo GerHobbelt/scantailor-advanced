@@ -18,8 +18,8 @@
 
 #include "DetectVertContentBounds.h"
 #include "DebugImages.h"
-#include "VecNT.h"
-#include "SidesOfLine.h"
+#include "../foundation/VecNT.h"
+#include "../math/SidesOfLine.h"
 #include "imageproc/BinaryImage.h"
 #include "imageproc/Constants.h"
 #include <QImage>

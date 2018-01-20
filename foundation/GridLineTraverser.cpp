@@ -17,7 +17,7 @@
 */
 
 #include "GridLineTraverser.h"
-#include "LineIntersectionScalar.h"
+#include "../math/LineIntersectionScalar.h"
 #include <algorithm>
 #include <cstdlib>
 

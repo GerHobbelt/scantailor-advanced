@@ -19,7 +19,7 @@
 #ifndef DEWARPING_DISTORTION_MODEL_BUILDER_H_
 #define DEWARPING_DISTORTION_MODEL_BUILDER_H_
 
-#include "VecNT.h"
+#include "../foundation/VecNT.h"
 #include <QTransform>
 #include <QPointF>
 #include <QLineF>

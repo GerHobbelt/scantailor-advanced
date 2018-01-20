@@ -19,10 +19,10 @@
 #ifndef SPFIT_SPLINE_FITTER_H_
 #define SPFIT_SPLINE_FITTER_H_
 
-#include "NonCopyable.h"
+#include "../../foundation/NonCopyable.h"
 #include "FittableSpline.h"
 #include "Optimizer.h"
-#include "VecNT.h"
+#include "../../foundation/VecNT.h"
 #include <vector>
 
 namespace spfit

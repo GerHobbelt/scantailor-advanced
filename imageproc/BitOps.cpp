@@ -81,4 +81,3 @@ unsigned char const reversedBits[256] = {
 } // namespace detail
 
 } // namespace imageproc
-

@@ -18,8 +18,8 @@
 
 #include "RasterDewarper.h"
 #include "CylindricalSurfaceDewarper.h"
-#include "HomographicTransform.h"
-#include "VecNT.h"
+#include "../math/HomographicTransform.h"
+#include "../foundation/VecNT.h"
 #include "imageproc/ColorMixer.h"
 #include "imageproc/GrayImage.h"
 #include <QtGlobal>

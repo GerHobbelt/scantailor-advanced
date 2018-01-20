@@ -18,8 +18,8 @@
 
 #include "TextLineRefiner.h"
 #include "Dpi.h"
-#include "VecNT.h"
-#include "NumericTraits.h"
+#include "../foundation/VecNT.h"
+#include "../foundation/NumericTraits.h"
 #include "DebugImages.h"
 #include "imageproc/GrayImage.h"
 #include "imageproc/GaussBlur.h"

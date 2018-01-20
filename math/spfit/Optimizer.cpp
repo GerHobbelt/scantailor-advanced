@@ -17,7 +17,7 @@
 */
 
 #include "Optimizer.h"
-#include "MatrixCalc.h"
+#include "../../math/MatrixCalc.h"
 #include <boost/foreach.hpp>
 #include <stdexcept>
 #include <algorithm>

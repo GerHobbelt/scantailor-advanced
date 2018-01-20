@@ -19,7 +19,7 @@
 #include "ZoneVertexDragInteraction.h"
 #include "ZoneInteractionContext.h"
 #include "EditableZoneSet.h"
-#include "ImageViewBase.h"
+#include "../imageproc/ImageViewBase.h"
 #include <QTransform>
 #include <QMouseEvent>
 #include <QPainter>
