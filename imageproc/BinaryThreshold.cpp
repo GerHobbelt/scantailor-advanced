@@ -38,6 +38,8 @@ BinaryThreshold::otsuThreshold(QImage const& image)
 BinaryThreshold
 BinaryThreshold::otsuThreshold(GrayscaleHistogram const& pixels_by_color)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int32_t pixels_by_threshold[256];
 	int64_t moment_by_threshold[256];
 	
@@ -85,6 +87,10 @@ BinaryThreshold::otsuThreshold(GrayscaleHistogram const& pixels_by_color)
 	// Compensate the "< threshold" vs "<= threshold" difference.
 	++first_best_threshold;
 	++last_best_threshold;
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "BinaryThreshold::otsuThreshold(): " << elapsed.count() << "s" << std::endl;
 	
 	// The middle between the two.
 	return BinaryThreshold((first_best_threshold + last_best_threshold) >> 1);
@@ -95,6 +101,8 @@ BinaryThreshold::mokjiThreshold(
 	QImage const& image, unsigned const max_edge_width,
 	unsigned const min_edge_magnitude)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	if (max_edge_width < 1) {
 		throw std::invalid_argument("mokjiThreshold: invalud max_edge_width");
 	}
@@ -148,6 +156,11 @@ BinaryThreshold::mokjiThreshold(
 	}
 	
 	double const threshold = 0.5 * nominator / denominator;
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "BinaryThreshold::mokjiThreshold(): " << elapsed.count() << "s" << std::endl;
+
 	return BinaryThreshold((int)(threshold + 0.5));
 }
 

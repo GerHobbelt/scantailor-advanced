@@ -298,7 +298,7 @@ unsigned char darkestGrayLevel(QImage const& image)
 }
 
 GrayscaleHistogram::GrayscaleHistogram(QImage const& img)
-{
+{	
 	memset(m_pixels, 0, sizeof(m_pixels));
 	
 	if (img.isNull()) {
@@ -357,6 +357,8 @@ GrayscaleHistogram::GrayscaleHistogram(
 void
 GrayscaleHistogram::fromMonoImage(QImage const& img)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	int const bpl = img.bytesPerLine();
@@ -391,11 +393,17 @@ GrayscaleHistogram::fromMonoImage(QImage const& img)
 	
 	m_pixels[qGray(color0)] = num_bits_0;
 	m_pixels[qGray(color1)] = num_bits_1;
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromMonoImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 void
 GrayscaleHistogram::fromMonoMSBImage(QImage const& img, BinaryImage const& mask)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	int const wpl = img.bytesPerLine() >> 2;
@@ -431,11 +439,17 @@ GrayscaleHistogram::fromMonoMSBImage(QImage const& img, BinaryImage const& mask)
 	
 	m_pixels[qGray(color0)] = num_bits_0;
 	m_pixels[qGray(color1)] = num_bits_1;
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromMonoMSBImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 void
 GrayscaleHistogram::fromGrayscaleImage(QImage const& img)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	int const bpl = img.bytesPerLine();
@@ -446,11 +460,16 @@ GrayscaleHistogram::fromGrayscaleImage(QImage const& img)
 			++m_pixels[line[x]];
 		}
 	}
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromGrayscaleImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 void
 GrayscaleHistogram::fromGrayscaleImage(QImage const& img, BinaryImage const& mask)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	int const bpl = img.bytesPerLine();
@@ -466,11 +485,16 @@ GrayscaleHistogram::fromGrayscaleImage(QImage const& img, BinaryImage const& mas
 			}
 		}
 	}
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromGrayscaleImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 void
 GrayscaleHistogram::fromAnyImage(QImage const& img)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	
@@ -479,11 +503,16 @@ GrayscaleHistogram::fromAnyImage(QImage const& img)
 			++m_pixels[qGray(img.pixel(x, y))];
 		}
 	}
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromAnyImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 void
 GrayscaleHistogram::fromAnyImage(QImage const& img, BinaryImage const& mask)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	int const w = img.width();
 	int const h = img.height();
 	uint32_t const* mask_line = mask.data();
@@ -497,6 +526,9 @@ GrayscaleHistogram::fromAnyImage(QImage const& img, BinaryImage const& mask)
 			}
 		}
 	}
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "GrayscaleHistogram::fromAnyImage(): " << elapsed.count() << "s" << std::endl;
 }
 
 } // namespace imageproc

@@ -45,6 +45,9 @@
 #include <vector>
 #include <set>
 
+#include <chrono>
+#include <iostream>
+
 class AbstractFilter;
 class AbstractRelinker;
 class ThumbnailPixmapCache;
