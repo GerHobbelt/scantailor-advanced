@@ -1,0 +1,77 @@
+/*
+    Scan Tailor - Interactive post-processing tool for scanned pages.
+    Copyright (C) 2007-2008  Joseph Artsimovich <joseph_a@mail.ru>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef PROJECTCREATIONCONTEXT_H_
+#define PROJECTCREATIONCONTEXT_H_
+
+#include <QObject>
+#include <QPointer>
+#include <QString>
+#include <Qt>
+#include <vector>
+#include "ImageFileInfo.h"
+#include "NonCopyable.h"
+
+class ProjectFilesDialog;
+class FixDpiDialog;
+class QWidget;
+
+class ProjectCreationContext : public QObject {
+  Q_OBJECT
+  DECLARE_NON_COPYABLE(ProjectCreationContext)
+
+ public:
+  explicit ProjectCreationContext(QWidget* parent);
+
+  ~ProjectCreationContext() override;
+
+  const std::vector<ImageFileInfo>& files() const { return m_files; }
+
+  const QString& outDir() const { return m_outDir; }
+
+  Qt::LayoutDirection layoutDirection() const { return m_layoutDirection; }
+
+ signals:
+
+  void done(ProjectCreationContext* context);
+
+ private slots:
+
+  void projectFilesSubmitted();
+
+  void projectFilesDialogDestroyed();
+
+  void fixedDpiSubmitted();
+
+  void fixDpiDialogDestroyed();
+
+ private:
+  void showProjectFilesDialog();
+
+  void showFixDpiDialog();
+
+  QPointer<ProjectFilesDialog> m_projectFilesDialog;
+  QPointer<FixDpiDialog> m_fixDpiDialog;
+  QString m_outDir;
+  std::vector<ImageFileInfo> m_files;
+  Qt::LayoutDirection m_layoutDirection;
+  QWidget* m_parent;
+};
+
+
+#endif  // ifndef PROJECTCREATIONCONTEXT_H_
