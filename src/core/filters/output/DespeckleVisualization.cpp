@@ -59,9 +59,7 @@ void DespeckleVisualization::colorizeSpeckles(QImage& image, const imageproc::Bi
       const float alphaUpperBound = 0.7f;
       const float noSpecklesOverlayAlpha = 0.3f;
       const float scale = alphaUpperBound / sqRadius;
-      const float alpha = (sqDist == SEDM::INF_DIST // check if there are any speckles
-                           ? noSpecklesOverlayAlpha
-                           : alphaUpperBound - scale * sqDist);
+      const float alpha = (sqDist == SEDM::INF_DIST) ? noSpecklesOverlayAlpha : alphaUpperBound - scale * sqDist;
       if (alpha > 0) {
         const float alpha2 = 1.0f - alpha;
         const float overlayR = 255;
