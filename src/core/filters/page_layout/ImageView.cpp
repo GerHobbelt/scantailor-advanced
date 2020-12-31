@@ -12,6 +12,7 @@
 #include <imageproc/Transform.h>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include "ImagePresentation.h"

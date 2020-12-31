@@ -20,6 +20,7 @@
 #include <Transform.h>
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <cmath>
 #include <queue>
 #include "DebugImages.h"

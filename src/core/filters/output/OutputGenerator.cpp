@@ -39,6 +39,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPointF>
 #include <QPolygonF>
 #include <QSize>

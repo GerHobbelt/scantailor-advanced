@@ -4,6 +4,7 @@
 #include "ZoneDefaultInteraction.h"
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include "ImageViewBase.h"
 #include "SerializableSpline.h"
 #include "ZoneInteractionContext.h"
