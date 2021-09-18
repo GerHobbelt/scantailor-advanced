@@ -22,7 +22,8 @@ ZoneInteractionContext::ZoneInteractionContext(ImageViewBase& imageView, Editabl
       m_zoneDragInteractionCreator(boost::bind(&ZoneInteractionContext::createStdZoneDragInteraction, this, _1, _2)),
       m_contextMenuInteractionCreator(boost::bind(&ZoneInteractionContext::createStdContextMenuInteraction, this, _1)),
       m_showPropertiesCommand(&ZoneInteractionContext::showPropertiesStub),
-      m_zoneCreationMode(ZoneCreationMode::POLYGONAL) {}
+      //m_zoneCreationMode(ZoneCreationMode::POLYGONAL) {}
+      m_zoneCreationMode(ZoneCreationMode::RECTANGULAR) {}
 
 ZoneInteractionContext::~ZoneInteractionContext() = default;
 
