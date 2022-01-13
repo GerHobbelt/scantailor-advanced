@@ -1,16 +1,16 @@
 // Copyright (C) 2019  Joseph Artsimovich <joseph.artsimovich@gmail.com>, 4lex4 <4lex49@zoho.com>
 // Use of this source code is governed by the GNU GPLv3 license that can be found in the LICENSE file.
 
-#include "SauvolaBinarizationOptionsWidget.h"
+#include "SauvolaModBinarizationOptionsWidget.h"
 
 #include <utility>
 
 
 namespace output {
 
-SauvolaBinarizationOptionsWidget::SauvolaBinarizationOptionsWidget(std::shared_ptr<Settings> settings)
+SauvolaModBinarizationOptionsWidget::SauvolaModBinarizationOptionsWidget(std::shared_ptr<Settings> settings)
     : m_settings(std::move(settings)),
-      m_connectionManager(std::bind(&SauvolaBinarizationOptionsWidget::setupUiConnections, this)) {
+      m_connectionManager(std::bind(&SauvolaModBinarizationOptionsWidget::setupUiConnections, this)) {
   setupUi(this);
 
   m_delayedStateChanger.setSingleShot(true);
@@ -18,7 +18,7 @@ SauvolaBinarizationOptionsWidget::SauvolaBinarizationOptionsWidget(std::shared_p
   setupUiConnections();
 }
 
-void SauvolaBinarizationOptionsWidget::updateUi(const PageId& pageId) {
+void SauvolaModBinarizationOptionsWidget::updateUi(const PageId& pageId) {
   auto block = m_connectionManager.getScopedBlock();
 
   const Params params(m_settings->getParams(pageId));
@@ -29,7 +29,7 @@ void SauvolaBinarizationOptionsWidget::updateUi(const PageId& pageId) {
   updateView();
 }
 
-void SauvolaBinarizationOptionsWidget::windowSizeChanged(int value) {
+void SauvolaModBinarizationOptionsWidget::windowSizeChanged(int value) {
   BlackWhiteOptions opt(m_colorParams.blackWhiteOptions());
   opt.setWindowSize(value);
   m_colorParams.setBlackWhiteOptions(opt);
@@ -38,7 +38,7 @@ void SauvolaBinarizationOptionsWidget::windowSizeChanged(int value) {
   m_delayedStateChanger.start(750);
 }
 
-void SauvolaBinarizationOptionsWidget::sauvolaCoefChanged(double value) {
+void SauvolaModBinarizationOptionsWidget::sauvolaCoefChanged(double value) {
   BlackWhiteOptions opt(m_colorParams.blackWhiteOptions());
   opt.setSauvolaCoef(value);
   m_colorParams.setBlackWhiteOptions(opt);
@@ -47,19 +47,19 @@ void SauvolaBinarizationOptionsWidget::sauvolaCoefChanged(double value) {
   m_delayedStateChanger.start(750);
 }
 
-void SauvolaBinarizationOptionsWidget::updateView() {
+void SauvolaModBinarizationOptionsWidget::updateView() {
   BlackWhiteOptions blackWhiteOptions = m_colorParams.blackWhiteOptions();
   windowSize->setValue(blackWhiteOptions.getWindowSize());
   sauvolaCoef->setValue(blackWhiteOptions.getSauvolaCoef());
 }
 
-void SauvolaBinarizationOptionsWidget::sendStateChanged() {
+void SauvolaModBinarizationOptionsWidget::sendStateChanged() {
   emit stateChanged();
 }
 
 #define CONNECT(...) m_connectionManager.addConnection(connect(__VA_ARGS__))
 
-void SauvolaBinarizationOptionsWidget::setupUiConnections() {
+void SauvolaModBinarizationOptionsWidget::setupUiConnections() {
   CONNECT(windowSize, SIGNAL(valueChanged(int)), this, SLOT(windowSizeChanged(int)));
   CONNECT(sauvolaCoef, SIGNAL(valueChanged(double)), this, SLOT(sauvolaCoefChanged(double)));
   CONNECT(&m_delayedStateChanger, SIGNAL(timeout()), this, SLOT(sendStateChanged()));
