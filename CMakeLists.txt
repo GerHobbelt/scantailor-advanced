@@ -28,9 +28,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ui)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml LinguistTools)
 
-#to silence temporarily some messages related to auto-pointer being deprecated
-add_compile_options(-Wno-deprecated-declarations)
-
 # This forces Visual Studio 2008 SP1 to actually link to the versions of the
 # libraries it ships with!  It's harmless on other platforms.
 ADD_DEFINITIONS(-D_BIND_TO_CURRENT_VCLIBS_VERSION=1)
