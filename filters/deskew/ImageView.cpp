@@ -17,7 +17,6 @@
 */
 
 #include "ImageView.h"
-#include "ImageView.h.moc"
 #include "ImageTransformation.h"
 #include "ImagePresentation.h"
 #include "InteractionState.h"
@@ -197,7 +196,7 @@ ImageView::onWheelEvent(QWheelEvent* event, InteractionState& interaction)
 	}
 	
 	event->accept();
-	double const delta = degree_fraction * event->delta() / 120;
+	double const delta = degree_fraction * event->angleDelta().y() / 120;
 	double angle_deg = m_xform.postRotation() - delta;
 	angle_deg = qBound(-m_maxRotationDeg, angle_deg, m_maxRotationDeg);
 	if (angle_deg == m_xform.postRotation()) {

@@ -17,7 +17,6 @@
 */
 
 #include "ImageView.h"
-#include "ImageView.h.moc"
 #include "OptionsWidget.h"
 #include "Margins.h"
 #include "Settings.h"
@@ -37,6 +36,7 @@
 #include <QColor>
 #include <QDebug>
 #include <Qt>
+#include <QPainterPath>
 #ifndef Q_MOC_RUN
 #include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>

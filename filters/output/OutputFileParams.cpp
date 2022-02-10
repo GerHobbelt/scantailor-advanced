@@ -37,7 +37,7 @@ OutputFileParams::OutputFileParams(QFileInfo const& file_info)
 {
 	if (file_info.exists()) {
 		m_size = file_info.size();
-		m_mtime = file_info.lastModified().toTime_t();
+		m_mtime = file_info.lastModified().toSecsSinceEpoch();
 	}
 }
 

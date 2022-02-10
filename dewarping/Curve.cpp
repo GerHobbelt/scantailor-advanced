@@ -95,7 +95,7 @@ std::vector<QPointF>
 Curve::deserializePolyline(QDomElement const& el)
 {
 	QByteArray ba(QByteArray::fromBase64(el.text().trimmed().toLatin1()));
-	QDataStream strm(&ba, QIODevice::ReadOnly);
+	QDataStream strm(&ba, QIODeviceBase::ReadOnly);
 	strm.setVersion(QDataStream::Qt_4_4);
 	strm.setByteOrder(QDataStream::LittleEndian);
 
@@ -122,7 +122,7 @@ Curve::serializePolyline(
 
 	QByteArray ba;
 	ba.reserve(8 * polyline.size());
-	QDataStream strm(&ba, QIODevice::WriteOnly);
+	QDataStream strm(&ba, QIODeviceBase::WriteOnly);
 	strm.setVersion(QDataStream::Qt_4_4);
 	strm.setByteOrder(QDataStream::LittleEndian);
 

@@ -1,5 +1,10 @@
 PROJECT(interaction)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
 SET(
@@ -17,8 +22,9 @@ SET(
 )
 
 SOURCE_GROUP(Sources FILES ${sources})
-QT4_AUTOMOC(${sources})
 
 ADD_LIBRARY(interaction STATIC ${sources})
+
+target_link_libraries(interaction PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
 
 TRANSLATION_SOURCES(scantailor ${sources})

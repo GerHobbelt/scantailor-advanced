@@ -39,6 +39,7 @@
 #include <QPen>
 #include <QColor>
 #include <QDebug>
+#include <QRandomGenerator>
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
 #endif
@@ -208,11 +209,11 @@ DistortionModelBuilder::tryBuildModel(DebugImages* dbg, QImage const* dbg_backgr
 	}
 
 	// Continue by throwing in some random pairs of lines.
-	qsrand(0); // Repeatablity is important.
+	QRandomGenerator prng(0); // Repeatablity is important.
 	int random_pairs_remaining = 10;
 	while (random_pairs_remaining-- > 0) {
-		int i = qrand() % num_curves;
-		int j = qrand() % num_curves;
+		int i = prng.generate() % num_curves;
+		int j = prng.generate() % num_curves;
 		if (i > j) {
 			std::swap(i, j);
 		}
@@ -352,7 +353,7 @@ DistortionModelBuilder::intersectFront(
 
 	QLineF const front_segment(polyline.front(), polyline[1]);
 	QPointF intersection;
-	if (bound.intersect(front_segment, &intersection) != QLineF::NoIntersection) {
+	if (bound.intersects(front_segment, &intersection) != QLineF::NoIntersection) {
 		polyline.front() = intersection;
 	}
 }
@@ -365,7 +366,7 @@ DistortionModelBuilder::intersectBack(
 
 	QLineF const back_segment(polyline[polyline.size() - 2], polyline.back());
 	QPointF intersection;
-	if (bound.intersect(back_segment, &intersection) != QLineF::NoIntersection) {
+	if (bound.intersects(back_segment, &intersection) != QLineF::NoIntersection) {
 		polyline.back() = intersection;
 	}
 }

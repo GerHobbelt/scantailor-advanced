@@ -17,7 +17,6 @@
 */
 
 #include "ZoneContextMenuInteraction.h"
-#include "ZoneContextMenuInteraction.h.moc"
 #include "ZoneInteractionContext.h"
 #include "ImageViewBase.h"
 #include "EditableZoneSet.h"
@@ -33,6 +32,7 @@
 #include <QCursor>
 #include <QMessageBox>
 #include <QDebug>
+#include <QPainterPath>
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>

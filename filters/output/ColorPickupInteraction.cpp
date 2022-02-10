@@ -64,7 +64,7 @@ ColorPickupInteraction::isActive(InteractionState const& interaction) const
 
 void
 ColorPickupInteraction::onPaint(
-	QPainter& painter, InteractionState const& interaction)
+  QPainter& painter, InteractionState const& /*interaction*/)
 {
 	if (m_dontDrawCircle) {
 		return;
@@ -82,7 +82,7 @@ ColorPickupInteraction::onPaint(
 
 void
 ColorPickupInteraction::onMousePressEvent(
-	QMouseEvent* event, InteractionState& interaction)
+	QMouseEvent* event, InteractionState& /*interaction*/)
 {
 	if (event->buttons() == Qt::LeftButton) { // Left and only left button.
 		event->accept();
@@ -93,14 +93,14 @@ ColorPickupInteraction::onMousePressEvent(
 
 void
 ColorPickupInteraction::onMouseMoveEvent(
-	QMouseEvent* event, InteractionState& interaction)
+	QMouseEvent* /*event*/, InteractionState& /*interaction*/)
 {
 	m_rContext.imageView().update();
 }
 
 void
 ColorPickupInteraction::onKeyPressEvent(
-	QKeyEvent* event, InteractionState& interaction)
+	QKeyEvent* event, InteractionState& /*interaction*/)
 {
 	if (event->key() == Qt::Key_Escape) {
 		event->accept();
@@ -114,7 +114,8 @@ ColorPickupInteraction::takeColor()
 	ScopedIncDec<int> const guard(m_dontDrawCircle);
 
 	QRect const rect(targetBoundingRect());
-	QPixmap const pixmap(QPixmap::grabWidget(&m_rContext.imageView(), rect));
+  //QPixmap const pixmap(QPixmap::grabWidget(&m_rContext.imageView(), rect));
+  QPixmap const pixmap = m_rContext.imageView().grab(rect);
 	if (pixmap.isNull()) {
 		return;
 	}

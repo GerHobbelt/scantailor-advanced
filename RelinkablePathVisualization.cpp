@@ -17,7 +17,6 @@
 */
 
 #include "RelinkablePathVisualization.h"
-#include "RelinkablePathVisualization.h.moc"
 #include "RelinkablePath.h"
 #include "QtSignalForwarder.h"
 #include <QHBoxLayout>
@@ -66,7 +65,6 @@ RelinkablePathVisualization::RelinkablePathVisualization(QWidget* parent)
 ,	m_pLayout(new QHBoxLayout(this))
 {
 	m_pLayout->setSpacing(0);
-	m_pLayout->setMargin(0);
 }
 
 void
@@ -86,7 +84,7 @@ RelinkablePathVisualization::setPath(RelinkablePath const& path, bool clickable)
 {
 	clear();
 
-	QStringList components(path.normalizedPath().split(QChar('/'), QString::SkipEmptyParts));
+	QStringList components(path.normalizedPath().split(QChar('/'), Qt::SkipEmptyParts));
 	if (components.empty()) {
 		return;
 	}

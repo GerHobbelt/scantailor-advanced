@@ -35,7 +35,7 @@ QString
 PageId::subPageToString(SubPage const sub_page)
 {
 	char const* str = 0;
-	
+
 	switch (sub_page) {
 		case SINGLE_PAGE:
 			str = "single";
@@ -47,9 +47,9 @@ PageId::subPageToString(SubPage const sub_page)
 			str = "right";
 			break;
 	}
-	
+
 	assert(str);
-	return QString::fromAscii(str);
+	return QString::fromLatin1(str);
 }
 
 PageId::SubPage
@@ -57,7 +57,7 @@ PageId::subPageFromString(QString const& string, bool* ok)
 {
 	bool recognized = true;
 	SubPage sub_page = SINGLE_PAGE;
-	
+
 	if (string == "single") {
 		sub_page = SINGLE_PAGE;
 	} else if (string == "left") {
@@ -67,7 +67,7 @@ PageId::subPageFromString(QString const& string, bool* ok)
 	} else {
 		recognized = false;
 	}
-	
+
 	if (ok) {
 		*ok = recognized;
 	}

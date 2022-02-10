@@ -46,9 +46,9 @@ class LoadFileTask::ErrorResult : public FilterResult
 	Q_DECLARE_TR_FUNCTIONS(LoadFileTask) 
 public:
 	ErrorResult(QString const& file_path);
-	
+
 	virtual void updateUI(FilterUiInterface* ui);
-	
+
 	virtual IntrusivePtr<AbstractFilter> filter() {
 		return IntrusivePtr<AbstractFilter>();
 	}
@@ -81,10 +81,10 @@ FilterResultPtr
 LoadFileTask::operator()()
 {
 	QImage image(ImageLoader::load(m_imageId));
-	
+
 	try {
 		throwIfCancelled();
-		
+
 		if (image.isNull()) {
 			return FilterResultPtr(new ErrorResult(m_imageId.filePath()));
 		} else {
@@ -161,7 +161,7 @@ LoadFileTask::ErrorResult::updateUI(FilterUiInterface* ui)
 			"The following file doesn't exist:<br>%1<br>"
 			"<br>"
 			"Use the <a href=\"#relink\">Relinking Tool</a> to locate it."
-		).arg(Qt::escape(m_filePath));
+		).arg(m_filePath.toHtmlEscaped());
 		fmt = Qt::RichText;
 	}
 	ui->setImageWidget(new ErrWidget(ui->relinkingDialogRequester(), err_msg, fmt), ui->TRANSFER_OWNERSHIP);

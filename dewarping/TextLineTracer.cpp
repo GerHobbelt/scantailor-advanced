@@ -557,7 +557,7 @@ QLineF
 TextLineTracer::calcMidLine(QLineF const& line1, QLineF const& line2)
 {
 	QPointF intersection;
-	if (line1.intersect(line2, &intersection) == QLineF::NoIntersection) {
+	if (line1.intersects(line2, &intersection) == QLineF::NoIntersection) {
 		// Lines are parallel.
 		QPointF const p1(line2.p1());
 		QPointF const p2(ToLineProjector(line1).projectionPoint(p1));

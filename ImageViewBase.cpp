@@ -17,7 +17,6 @@
 */
 
 #include "ImageViewBase.h"
-#include "ImageViewBase.h.moc"
 #include "NonCopyable.h"
 #include "ImagePresentation.h"
 #include "OpenGLSupport.h"
@@ -648,7 +647,7 @@ ImageViewBase::resizeEvent(QResizeEvent* event)
 }
 
 void
-ImageViewBase::enterEvent(QEvent* event)
+ImageViewBase::enterEvent(QEnterEvent* event)
 {
 	viewport()->setFocus();
 	QAbstractScrollArea::enterEvent(event);

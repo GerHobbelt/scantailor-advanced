@@ -162,7 +162,7 @@ private:
 	class ModifyAlignment;
 	class ModifyContentSize;
 	
-	std::auto_ptr<Impl> m_ptrImpl;
+  std::auto_ptr<Impl> m_ptrImpl;
 };
 
 } // namespace page_layout

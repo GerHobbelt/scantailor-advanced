@@ -17,7 +17,6 @@
 */
 
 #include "ProjectFilesDialog.h"
-#include "ProjectFilesDialog.h.moc"
 #include "NonCopyable.h"
 #include "ImageMetadata.h"
 #include "ImageMetadataLoader.h"
@@ -33,7 +32,6 @@
 #include <QFileInfoList>
 #include <QVariant>
 #include <QVector>
-#include <QVectorIterator>
 #include <QMessageBox>
 #include <QTimerEvent>
 #include <QSettings>

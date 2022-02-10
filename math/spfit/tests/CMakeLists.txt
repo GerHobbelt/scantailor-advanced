@@ -1,5 +1,10 @@
 INCLUDE_DIRECTORIES(BEFORE ..)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
 SET(
 	sources
 	${CMAKE_SOURCE_DIR}/tests/main.cpp
@@ -16,4 +21,4 @@ SET(
 )
 
 ADD_EXECUTABLE(spfit_tests ${sources})
-TARGET_LINK_LIBRARIES(spfit_tests ${libs})
+TARGET_LINK_LIBRARIES(spfit_tests ${libs} Qt6::Core)

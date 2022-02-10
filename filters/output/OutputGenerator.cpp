@@ -80,6 +80,7 @@
 #include <QtGlobal>
 #include <QDebug>
 #include <Qt>
+#include <QPainterPath>
 #include <vector>
 #include <memory>
 #include <new>

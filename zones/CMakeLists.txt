@@ -2,6 +2,11 @@ PROJECT(zones)
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml)
+
 SET(
 	sources
 	SplineVertex.cpp SplineVertex.h
@@ -21,8 +26,9 @@ SET(
 )
 
 SOURCE_GROUP(Sources FILES ${sources})
-QT4_AUTOMOC(${sources})
 
 ADD_LIBRARY(zones STATIC ${sources})
+
+target_link_libraries(zones PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml)
 
 TRANSLATION_SOURCES(scantailor ${sources})

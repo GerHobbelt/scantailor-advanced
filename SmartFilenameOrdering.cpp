@@ -18,7 +18,6 @@
 
 #include "SmartFilenameOrdering.h"
 #include <QFileInfo>
-#include <QRegExp>
 #include <QString>
 
 bool
@@ -79,4 +78,12 @@ SmartFilenameOrdering::operator()(QFileInfo const& lhs, QFileInfo const& rhs) co
 	// However, if they aren't symbol-to-symbol equal, we can't treat
 	// them as equal, so let's do a usual comparison now.
 	return lhs_fname < rhs_fname;
+}
+
+bool
+SmartFilenameOrdering::operator()(QString const& lhs, QString const& rhs) const
+{
+	QFileInfo lhs_i(lhs);
+	QFileInfo rhs_i(rhs);
+	return this->operator()(lhs_i, rhs_i);
 }

@@ -1,5 +1,10 @@
 PROJECT("Dewarping library")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Xml)
+
 SET(
 	sources
 	Curve.cpp Curve.h
@@ -17,3 +22,5 @@ SET(
 SOURCE_GROUP("Sources" FILES ${sources})
 
 ADD_LIBRARY(dewarping STATIC ${sources})
+
+target_link_libraries(dewarping PRIVATE Qt6::Core Qt6::Gui Qt6::Xml)

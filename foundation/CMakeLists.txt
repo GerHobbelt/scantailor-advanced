@@ -1,5 +1,10 @@
 PROJECT("Foundation library")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Xml)
+
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
 SET(
@@ -30,6 +35,7 @@ SET(
 	ValueConv.h
 )
 SOURCE_GROUP("Sources" FILES ${sources})
-QT4_AUTOMOC(${sources})
 
 ADD_LIBRARY(foundation STATIC ${sources})
+
+target_link_libraries(foundation PRIVATE Qt6::Core Qt6::Xml)

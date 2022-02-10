@@ -1,5 +1,11 @@
 INCLUDE_DIRECTORIES(BEFORE ..)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ui)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
 SET(
 	sources
 	main.cpp TestContentSpanFinder.cpp
@@ -19,4 +25,4 @@ SET(
 )
 
 ADD_EXECUTABLE(tests ${sources})
-TARGET_LINK_LIBRARIES(tests ${libs})
+TARGET_LINK_LIBRARIES(tests ${libs} Qt6::Core)

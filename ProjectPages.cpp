@@ -17,7 +17,6 @@
 */
 
 #include "ProjectPages.h"
-#include "ProjectPages.h.moc"
 #include "ImageFileInfo.h"
 #include "ImageMetadata.h"
 #include "ImageInfo.h"
@@ -51,10 +50,10 @@ ProjectPages::ProjectPages(
 	Qt::LayoutDirection const layout_direction)
 {
 	initSubPagesInOrder(layout_direction);
-	
+
 	BOOST_FOREACH(ImageInfo const& image, info) {
 		ImageDesc image_desc(image);
-		
+
 		// Enforce some rules.
 		if (image_desc.numLogicalPages == 2) {
 			image_desc.leftHalfRemoved = false;
@@ -75,7 +74,7 @@ ProjectPages::ProjectPages(
 	Pages const pages, Qt::LayoutDirection const layout_direction)
 {
 	initSubPagesInOrder(layout_direction);
-	
+
 	BOOST_FOREACH(ImageFileInfo const& file, files) {
 		QString const& file_path = file.fileInfo().absoluteFilePath();
 		std::vector<ImageMetadata> const& images = file.imageInfo();
@@ -120,10 +119,10 @@ PageSequence
 ProjectPages::toPageSequence(PageView const view) const
 {
 	PageSequence pages;
-	
+
 	if (view == PAGE_VIEW) {
 		QMutexLocker locker(&m_mutex);
-		
+
 		int const num_images = m_images.size();
 		for (int i = 0; i < num_images; ++i) {
 			ImageDesc const& image = m_images[i];
@@ -147,9 +146,9 @@ ProjectPages::toPageSequence(PageView const view) const
 		}
 	} else {
 		assert(view == IMAGE_VIEW);
-		
+
 		QMutexLocker locker(&m_mutex);
-		
+
 		int const num_images = m_images.size();
 		for (int i = 0; i < num_images; ++i) {
 			ImageDesc const& image = m_images[i];
@@ -164,7 +163,7 @@ ProjectPages::toPageSequence(PageView const view) const
 			);
 		}
 	}
-	
+
 	return pages;
 }
 
@@ -174,10 +173,10 @@ ProjectPages::listRelinkablePaths(VirtualFunction1<void, RelinkablePath const&>&
 	// It's generally a bad idea to do callbacks while holding an internal mutex,
 	// so we accumulate results into this vector first.
 	std::vector<QString> files;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
-		
+
 		files.reserve(m_images.size());
 		BOOST_FOREACH(ImageDesc const& image, m_images) {
 			files.push_back(image.id.filePath());
@@ -205,12 +204,12 @@ void
 ProjectPages::setLayoutTypeFor(ImageId const& image_id, LayoutType const layout)
 {
 	bool was_modified = false;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
 		setLayoutTypeForImpl(image_id, layout, &was_modified);
 	}
-	
+
 	if (was_modified) {
 		emit modified();
 	}
@@ -220,12 +219,12 @@ void
 ProjectPages::setLayoutTypeForAllPages(LayoutType const layout)
 {
 	bool was_modified = false;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
 		setLayoutTypeForAllPagesImpl(layout, &was_modified);
 	}
-	
+
 	if (was_modified) {
 		emit modified();
 	}
@@ -236,12 +235,12 @@ ProjectPages::autoSetLayoutTypeFor(
 	ImageId const& image_id, OrthogonalRotation const rotation)
 {
 	bool was_modified = false;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
 		autoSetLayoutTypeForImpl(image_id, rotation, &was_modified);
 	}
-	
+
 	if (was_modified) {
 		emit modified();
 	}
@@ -252,12 +251,12 @@ ProjectPages::updateImageMetadata(
 	ImageId const& image_id, ImageMetadata const& metadata)
 {
 	bool was_modified = false;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
 		updateImageMetadataImpl(image_id, metadata, &was_modified);
 	}
-	
+
 	if (was_modified) {
 		emit modified();
 	}
@@ -269,7 +268,7 @@ ProjectPages::adviseNumberOfLogicalPages(
 {
 	QSize const size(rotation.rotate(metadata.size()));
 	QSize const dpi(rotation.rotate(metadata.dpi().toSize()));
-	
+
 	if (size.width() * dpi.height() > size.height() * dpi.width()) {
 		return 2;
 	} else {
@@ -290,14 +289,14 @@ ProjectPages::insertImage(
 	ImageId const& existing, PageView const view)
 {
 	bool was_modified = false;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
 		return insertImageImpl(
 			new_image, before_or_after, existing, view, was_modified
 		);
 	}
-	
+
 	if (was_modified) {
 		emit modified();
 	}
@@ -341,13 +340,13 @@ bool
 ProjectPages::validateDpis() const
 {
 	QMutexLocker locker(&m_mutex);
-	
+
 	BOOST_FOREACH(ImageDesc const& image, m_images) {
 		if (!image.metadata.isDpiOK()) {
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -358,10 +357,11 @@ struct File
 {
 	QString fileName;
 	mutable std::vector<ImageMetadata> metadata;
-	
+
 	File(QString const& fname) : fileName(fname) {}
-	
-	operator ImageFileInfo() const { return ImageFileInfo(fileName, metadata); }
+
+	QFileInfo file_info{fileName};
+	operator ImageFileInfo() const { return ImageFileInfo(file_info, metadata); }
 };
 
 } // anonymous namespace
@@ -370,7 +370,7 @@ std::vector<ImageFileInfo>
 ProjectPages::toImageFileInfo() const
 {
 	using namespace boost::multi_index;
-	
+
 	multi_index_container<
 		File,
 		indexed_by<
@@ -378,16 +378,16 @@ ProjectPages::toImageFileInfo() const
 			sequenced<>
 		>
 	> files;
-	
+
 	{
 		QMutexLocker locker(&m_mutex);
-		
+
 		BOOST_FOREACH(ImageDesc const& image, m_images) {
 			File const file(image.id.filePath());
 			files.insert(file).first->metadata.push_back(image.metadata);
 		}
 	}
-	
+
 	return std::vector<ImageFileInfo>(files.get<1>().begin(), files.get<1>().end());
 }
 
@@ -396,7 +396,7 @@ ProjectPages::updateMetadataFrom(std::vector<ImageFileInfo> const& files)
 {
 	typedef std::map<ImageId, ImageMetadata> MetadataMap;
 	MetadataMap metadata_map;
-	
+
 	BOOST_FOREACH(ImageFileInfo const& file, files) {
 		QString const file_path(file.fileInfo().absoluteFilePath());
 		int page = 0;
@@ -405,9 +405,9 @@ ProjectPages::updateMetadataFrom(std::vector<ImageFileInfo> const& files)
 			++page;
 		}
 	}
-	
+
 	QMutexLocker locker(&m_mutex);
-	
+
 	BOOST_FOREACH(ImageDesc& image, m_images) {
 		MetadataMap::const_iterator const it(metadata_map.find(image.id));
 		if (it != metadata_map.end()) {
@@ -436,9 +436,9 @@ ProjectPages::setLayoutTypeForImpl(
 			if (delta == 0) {
 				break;
 			}
-			
+
 			image.numLogicalPages = adjusted_num_pages;
-			
+
 			*modified = true;
 			break;
 		}
@@ -449,7 +449,7 @@ void
 ProjectPages::setLayoutTypeForAllPagesImpl(
 	LayoutType const layout, bool* modified)
 {
-	int const num_pages = (layout == TWO_PAGE_LAYOUT ? 2 : 1);	
+	int const num_pages = (layout == TWO_PAGE_LAYOUT ? 2 : 1);
 	int const num_images = m_images.size();
 	for (int i = 0; i < num_images; ++i) {
 		ImageDesc& image = m_images[i];
@@ -490,9 +490,9 @@ ProjectPages::autoSetLayoutTypeForImpl(
 			if (delta == 0) {
 				break;
 			}
-			
+
 			image.numLogicalPages = num_pages;
-			
+
 			*modified = true;
 			break;
 		}
@@ -521,7 +521,7 @@ std::vector<PageInfo>
 ProjectPages::insertImageImpl(
 	ImageInfo const& new_image, BeforeOrAfter before_or_after,
 	ImageId const& existing, PageView const view, bool& modified)
-{	
+{
 	std::vector<PageInfo> logical_pages;
 
 	std::vector<ImageDesc>::iterator it(m_images.begin());
@@ -531,14 +531,14 @@ ProjectPages::insertImageImpl(
 	}
 	if (it == end) {
 		// Existing image not found.
-		if (!(before_or_after == BEFORE && existing.isNull())) { 
+		if (!(before_or_after == BEFORE && existing.isNull())) {
 			return logical_pages;
 		} // Otherwise we can still handle that case.
 	}
 	if (before_or_after == AFTER) {
 		++it;
 	}
-	
+
 	ImageDesc image_desc(new_image);
 
 	// Enforce some rules.
@@ -553,7 +553,7 @@ ProjectPages::insertImageImpl(
 	}
 
 	m_images.insert(it, image_desc);
-	
+
 	PageInfo page_info_templ(
 		PageId(new_image.id(), PageId::SINGLE_PAGE),
 		image_desc.metadata, image_desc.numLogicalPages,
@@ -634,7 +634,7 @@ ProjectPages::unremovePageImpl(PageId const& page_id, bool& modified)
 		// The corresponding image wasn't found.
 		return PageInfo();
 	}
-	
+
 	ImageDesc& image = *it;
 
 	if (image.numLogicalPages != 1) {
@@ -648,7 +648,7 @@ ProjectPages::unremovePageImpl(PageId const& page_id, bool& modified)
 	} else {
 		return PageInfo();
 	}
-	
+
 	image.numLogicalPages = 2;
 
 	return PageInfo(
@@ -697,7 +697,7 @@ ProjectPages::ImageDesc::logicalPageToSubPage(
 {
 	assert(numLogicalPages >= 1 && numLogicalPages <= 2);
 	assert(logical_page >= 0 && logical_page < numLogicalPages);
-	
+
 	if (numLogicalPages == 1) {
 		if (leftHalfRemoved && !rightHalfRemoved) {
 			return PageId::RIGHT_PAGE;

@@ -17,7 +17,6 @@
 */
 
 #include "MainWindow.h"
-#include "MainWindow.h.moc"
 #include "NewOpenProjectPanel.h"
 #include "RecentProjects.h"
 #include "WorkerThread.h"
@@ -138,7 +137,7 @@ class MainWindow::PageSelectionProviderImpl : public PageSelectionProvider
 {
 public:
 	PageSelectionProviderImpl(MainWindow* wnd) : m_ptrWnd(wnd) {}
-	
+
 	virtual PageSequence allPages() const {
 		return m_ptrWnd ? m_ptrWnd->allPages() : PageSequence();
 	}
@@ -146,7 +145,7 @@ public:
 	virtual std::set<PageId> selectedPages() const {
 		return m_ptrWnd ? m_ptrWnd->selectedPages() : std::set<PageId>();
 	}
-	
+
 	std::vector<PageRange> selectedRanges() const {
 		return m_ptrWnd ? m_ptrWnd->selectedRanges() : std::vector<PageRange>();
 	}
@@ -169,7 +168,7 @@ MainWindow::MainWindow()
 {
 	m_maxLogicalThumbSize = QSize(250, 160);
 	m_ptrThumbSequence.reset(new ThumbnailSequence(m_maxLogicalThumbSize));
-	
+
 	setupUi(this);
 	sortOptions->setVisible(false);
 
@@ -181,18 +180,18 @@ MainWindow::MainWindow()
 
 	createBatchProcessingWidget();
 	m_ptrProcessingIndicationWidget.reset(new ProcessingIndicationWidget);
-	
+
 	filterList->setStages(m_ptrStages);
 	filterList->selectRow(0);
-	
+
 	setupThumbView(); // Expects m_ptrThumbSequence to be initialized.
-	
+
 	m_ptrTabbedDebugImages.reset(new TabbedDebugImages);
-	
+
 	m_debug = actionDebug->isChecked();
 	m_pImageFrameLayout = new QStackedLayout(imageViewFrame);
 	m_pOptionsFrameLayout = new QStackedLayout(filterOptions);
-	
+
 	addAction(actionFirstPage);
 	addAction(actionLastPage);
 	addAction(actionNextPage);
@@ -214,7 +213,7 @@ MainWindow::MainWindow()
 		&OutOfMemoryHandler::instance(),
 		SIGNAL(outOfMemory()), SLOT(handleOutOfMemorySituation())
 	);
-	
+
 	connect(
 		filterList->selectionModel(),
 		SIGNAL(selectionChanged(QItemSelection const&, QItemSelection const&)),
@@ -224,13 +223,13 @@ MainWindow::MainWindow()
 		filterList, SIGNAL(launchBatchProcessing()),
 		this, SLOT(startBatchProcessing())
 	);
-	
+
 	connect(
 		m_ptrWorkerThread.get(),
 		SIGNAL(taskResult(BackgroundTaskPtr const&, FilterResultPtr const&)),
 		this, SLOT(filterResult(BackgroundTaskPtr const&, FilterResultPtr const&))
 	);
-	
+
 	connect(
 		m_ptrThumbSequence.get(),
 		SIGNAL(newSelectionLeader(PageInfo const&, QRectF const&, ThumbnailSequence::SelectionFlags)),
@@ -246,7 +245,7 @@ MainWindow::MainWindow()
 		SIGNAL(pastLastPageContextMenuRequested(QPoint const&)),
 		SLOT(pastLastPageContextMenuRequested(QPoint const&))
 	);
-	
+
 	connect(
 		thumbView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
 		this, SLOT(thumbViewScrolled())
@@ -263,7 +262,7 @@ MainWindow::MainWindow()
 		sortOptions, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(pageOrderingChanged(int))
 	);
-	
+
 	connect(actionFixDpi, SIGNAL(triggered(bool)), SLOT(fixDpiDialogRequested()));
 	connect(actionRelinking, SIGNAL(triggered(bool)), SLOT(showRelinkingDialog()));
 	connect(actionDebug, SIGNAL(toggled(bool)), SLOT(debugToggled(bool)));
@@ -272,7 +271,7 @@ MainWindow::MainWindow()
 		actionSettings, SIGNAL(triggered(bool)),
 		this, SLOT(openSettingsDialog())
 	);
-	
+
 	connect(
 		actionNewProject, SIGNAL(triggered(bool)),
 		this, SLOT(newProject())
@@ -297,7 +296,7 @@ MainWindow::MainWindow()
 		actionQuit, SIGNAL(triggered(bool)),
 		this, SLOT(close())
 	);
-	
+
 	updateProjectActions();
 	updateWindowTitle();
 	updateMainArea();
@@ -321,7 +320,7 @@ MainWindow::~MainWindow()
 		m_ptrBatchQueue->cancelAndClear();
 	}
 	m_ptrWorkerThread->shutdown();
-	
+
 	removeWidgetsFromLayout(m_pImageFrameLayout);
 	removeWidgetsFromLayout(m_pOptionsFrameLayout);
 	m_ptrTabbedDebugImages->clear();
@@ -355,7 +354,7 @@ MainWindow::switchToNewProject(
 	m_ptrInteractiveQueue->cancelAndClear();
 
 	Utils::maybeCreateCacheDir(out_dir);
-	
+
 	m_ptrPages = pages;
 	m_projectFile = project_file_path;
 
@@ -381,7 +380,7 @@ MainWindow::switchToNewProject(
 	if (project_reader) {
 		project_reader->readFilterSettings(m_ptrStages->filters());
 	}
-	
+
 	// Connect the filter list model to the view and select
 	// the first item.
 	{
@@ -389,7 +388,7 @@ MainWindow::switchToNewProject(
 		filterList->setStages(m_ptrStages);
 		filterList->selectRow(0);
 		m_curFilter = 0;
-		
+
 		// Setting a data model also implicitly sets a new
 		// selection model, so we have to reconnect to it.
 		connect(
@@ -400,7 +399,7 @@ MainWindow::switchToNewProject(
 	}
 
 	updateSortOptions();
-	
+
 	m_ptrContentBoxPropagator.reset(
 		new ContentBoxPropagator(
 			m_ptrStages->pageLayoutFilter(),
@@ -418,7 +417,7 @@ MainWindow::switchToNewProject(
 			)
 		)
 	);
-	
+
 	// Thumbnails are stored relative to the output directory,
 	// so recreate the thumbnail cache.
 	if (out_dir.isEmpty()) {
@@ -444,9 +443,9 @@ MainWindow::showNewOpenProjectPanel()
 	std::auto_ptr<QWidget> outer_widget(new QWidget);
 	QGridLayout* layout = new QGridLayout(outer_widget.get());
 	outer_widget->setLayout(layout);
-	
+
 	NewOpenProjectPanel* nop = new NewOpenProjectPanel(outer_widget.get());
-	
+
 	// We use asynchronous connections because otherwise we
 	// would be deleting a widget from its event handler, which
 	// Qt doesn't like.
@@ -465,14 +464,14 @@ MainWindow::showNewOpenProjectPanel()
 		this, SLOT(openProject(QString const&)),
 		Qt::QueuedConnection
 	);
-	
+
 	layout->addWidget(nop, 1, 1);
 	layout->setColumnStretch(0, 1);
 	layout->setColumnStretch(2, 1);
 	layout->setRowStretch(0, 1);
 	layout->setRowStretch(2, 1);
 	setImageWidget(outer_widget.release(), TRANSFER_OWNERSHIP);
-	
+
 	filterList->setBatchProcessingPossible(false);
 }
 
@@ -492,7 +491,7 @@ MainWindow::createBatchProcessingWidget()
 		m_ptrBatchProcessingWidget.get()
 	);
 	stop_btn->setStatusTip(tr("Stop batch processing"));
-	
+
 	class LowerPanel : public QWidget
 	{
 	public:
@@ -510,7 +509,7 @@ MainWindow::createBatchProcessingWidget()
 	layout->setColumnStretch(2, 1);
 	layout->setRowStretch(0, 1);
 	layout->setRowStretch(row, 1);
-	
+
 	connect(stop_btn, SIGNAL(clicked()), SLOT(stopBatchProcessing()));
 }
 
@@ -524,7 +523,7 @@ MainWindow::setupThumbView()
 	}
 	int const delta_x = thumbView->size().width() - inner_width;
 	thumbView->setMinimumWidth((int)ceil(m_maxLogicalThumbSize.width() + delta_x));
-	
+
 	thumbView->setBackgroundBrush(palette().color(QPalette::Window));
 	m_ptrThumbSequence->attachView(thumbView);
 }
@@ -545,7 +544,7 @@ MainWindow::timerEvent(QTimerEvent* const event)
 {
 	// We only use the timer event for delayed closing of the window.
 	killTimer(event->timerId());
-	
+
 	if (closeProjectInteractive()) {
 		m_closing = true;
 		QSettings settings;
@@ -567,7 +566,7 @@ MainWindow::promptProjectSave()
 		 QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel,
 		 QMessageBox::Save
 	);
-	
+
 	switch (res) {
 		case QMessageBox::Save:
 			return SAVE;
@@ -583,20 +582,20 @@ MainWindow::compareFiles(QString const& fpath1, QString const& fpath2)
 {
 	QFile file1(fpath1);
 	QFile file2(fpath2);
-	
+
 	if (!file1.open(QIODevice::ReadOnly)) {
 		return false;
 	}
 	if (!file2.open(QIODevice::ReadOnly)) {
 		return false;
 	}
-	
+
 	if (!file1.isSequential() && !file2.isSequential()) {
 		if (file1.size() != file2.size()) {
 			return false;
 		}
 	}
-	
+
 	int const chunk_size = 4096;
 	for (;;) {
 		QByteArray const chunk1(file1.read(chunk_size));
@@ -629,13 +628,13 @@ MainWindow::updateSortOptions()
 	IntrusivePtr<AbstractFilter> const filter(m_ptrStages->filterAt(m_curFilter));
 
 	sortOptions->clear();
-	
+
 	BOOST_FOREACH(PageOrderOption const& opt, filter->pageOrderOptions()) {
 		sortOptions->addItem(opt.name());
 	}
 
 	sortOptions->setVisible(sortOptions->count() > 0);
-	
+
 	if (sortOptions->count() > 0) {
 		sortOptions->setCurrentIndex(filter->selectedPageOrder());
 	}
@@ -649,7 +648,7 @@ MainWindow::resetThumbSequence(
 		IntrusivePtr<CompositeCacheDrivenTask> const task(
 			createCompositeCacheDrivenTask(m_curFilter)
 		);
-		
+
 		m_ptrThumbSequence->setThumbnailFactory(
 			IntrusivePtr<ThumbnailFactory>(
 				new ThumbnailFactory(
@@ -659,12 +658,12 @@ MainWindow::resetThumbSequence(
 			)
 		);
 	}
-	
+
 	m_ptrThumbSequence->reset(
 		m_ptrPages->toPageSequence(getCurrentView()),
 		ThumbnailSequence::RESET_SELECTION, page_order_provider
 	);
-	
+
 	if (!m_ptrThumbnailCache.get()) {
 		// Empty project.
 		assert(m_ptrPages->numImages() == 0);
@@ -697,22 +696,22 @@ MainWindow::setOptionsWidget(FilterOptionsWidget* widget, Ownership const owners
 		}
 		return;
 	}
-	
+
 	if (m_ptrOptionsWidget != widget) {
 		removeWidgetsFromLayout(m_pOptionsFrameLayout);
 	}
-	
+
 	// Delete the old widget we were owning, if any.
 	m_optionsWidgetCleanup.clear();
-	
+
 	if (ownership == TRANSFER_OWNERSHIP) {
 		m_optionsWidgetCleanup.add(widget);
 	}
-	
+
 	if (m_ptrOptionsWidget == widget) {
 		return;
 	}
-	
+
 	if (m_ptrOptionsWidget) {
 		disconnect(
 			m_ptrOptionsWidget, SIGNAL(reloadRequested()),
@@ -735,10 +734,10 @@ MainWindow::setOptionsWidget(FilterOptionsWidget* widget, Ownership const owners
 			this, SLOT(goToPage(PageId const&))
 		);
 	}
-	
+
 	m_pOptionsFrameLayout->addWidget(widget);
 	m_ptrOptionsWidget = widget;
-	
+
 	// We use an asynchronous connection here, because the slot
 	// will probably delete the options panel, which could be
 	// responsible for the emission of this signal.  Qt doesn't
@@ -776,13 +775,13 @@ MainWindow::setImageWidget(
 		}
 		return;
 	}
-	
+
 	removeImageWidget();
-	
+
 	if (ownership == TRANSFER_OWNERSHIP) {
 		m_imageWidgetCleanup.add(widget);
 	}
-	
+
 	if (!debug_images || debug_images->empty()) {
 		m_pImageFrameLayout->addWidget(widget);
 	} else {
@@ -802,9 +801,9 @@ void
 MainWindow::removeImageWidget()
 {
 	removeWidgetsFromLayout(m_pImageFrameLayout);
-	
+
 	m_ptrTabbedDebugImages->clear();
-	
+
 	// Delete the old widget we were owning, if any.
 	m_imageWidgetCleanup.clear();
 }
@@ -860,7 +859,7 @@ MainWindow::showRelinkingDialog()
 
 	m_ptrPages->listRelinkablePaths(dialog->pathCollector());
 	dialog->pathCollector()(RelinkablePath(m_outFileNameGen.outDir(), RelinkablePath::Dir));
-	
+
 	new QtSignalForwarder(
 		dialog, SIGNAL(accepted()),
 		boost::lambda::bind(&MainWindow::performRelinking, this, dialog->relinker())
@@ -897,7 +896,7 @@ MainWindow::goFirstPage()
 	if (isBatchProcessingInProgress() || !isProjectLoaded()) {
 		return;
 	}
-	
+
 	PageInfo const first_page(m_ptrThumbSequence->firstPage());
 	if (!first_page.isNull()) {
 		goToPage(first_page.id());
@@ -910,7 +909,7 @@ MainWindow::goLastPage()
 	if (isBatchProcessingInProgress() || !isProjectLoaded()) {
 		return;
 	}
-	
+
 	PageInfo const last_page(m_ptrThumbSequence->lastPage());
 	if (!last_page.isNull()) {
 		goToPage(last_page.id());
@@ -923,7 +922,7 @@ MainWindow::goNextPage()
 	if (isBatchProcessingInProgress() || !isProjectLoaded()) {
 		return;
 	}
-	
+
 	PageInfo const next_page(
 		m_ptrThumbSequence->nextPage(m_ptrThumbSequence->selectionLeader().id())
 	);
@@ -938,7 +937,7 @@ MainWindow::goPrevPage()
 	if (isBatchProcessingInProgress() || !isProjectLoaded()) {
 		return;
 	}
-	
+
 	PageInfo const prev_page(
 		m_ptrThumbSequence->prevPage(m_ptrThumbSequence->selectionLeader().id())
 	);
@@ -951,9 +950,9 @@ void
 MainWindow::goToPage(PageId const& page_id)
 {
 	focusButton->setChecked(true);
-	
+
 	m_ptrThumbSequence->setSelection(page_id);
-	
+
 	// If the page was already selected, it will be reloaded.
 	// That's by design.
 	updateMainArea();
@@ -971,7 +970,7 @@ MainWindow::currentPageChanged(
 			thumbView->ensureVisible(thumb_rect, 0, 0);
 		}
 	}
-	
+
 	if (flags & ThumbnailSequence::SELECTED_BY_USER) {
 		if (isBatchProcessingInProgress()) {
 			stopBatchProcessing();
@@ -992,11 +991,11 @@ MainWindow::pageContextMenuRequested(
 
 	// Make a copy to prevent it from being invalidated.
 	PageInfo const page_info(page_info_);
-	
+
 	if (!selected) {
 		goToPage(page_info.id());
 	}
-	
+
 	QMenu menu;
 
 	QAction* ins_before = menu.addAction(
@@ -1011,7 +1010,7 @@ MainWindow::pageContextMenuRequested(
 	QAction* remove = menu.addAction(
 		QIcon(":/icons/user-trash.png"), tr("Remove from project ...")
 	);
-	
+
 	QAction* action = menu.exec(screen_pos);
 	if (action == ins_before) {
 		showInsertFileDialog(BEFORE, page_info.imageId());
@@ -1031,7 +1030,7 @@ MainWindow::pastLastPageContextMenuRequested(QPoint const& screen_pos)
 
 	QMenu menu;
 	menu.addAction(QIcon(":/icons/insert-here-16.png"), tr("Insert here ..."));
-	
+
 	if (menu.exec(screen_pos)) {
 		showInsertFileDialog(BEFORE, ImageId());
 	}
@@ -1045,7 +1044,7 @@ MainWindow::thumbViewFocusToggled(bool const checked)
 		// No selected items.
 		return;
 	}
-	
+
 	if (checked) {
 		thumbView->ensureVisible(rect, 0, 0);
 	}
@@ -1059,12 +1058,12 @@ MainWindow::thumbViewScrolled()
 		// No items selected.
 		return;
 	}
-	
+
 	QRectF const viewport_rect(thumbView->viewport()->rect());
 	QRectF const viewport_item_rect(
 		thumbView->viewportTransform().mapRect(rect)
 	);
-	
+
 	double const intersection_threshold = 0.5;
 	if (viewport_item_rect.top() >= viewport_rect.top() &&
 			viewport_item_rect.top() + viewport_item_rect.height()
@@ -1085,25 +1084,25 @@ MainWindow::filterSelectionChanged(QItemSelection const& selected)
 	if (m_ignoreSelectionChanges) {
 		return;
 	}
-	
+
 	if (selected.empty()) {
 		return;
 	}
-	
+
 	m_ptrInteractiveQueue->cancelAndClear();
 	if (m_ptrBatchQueue.get()) {
 		// Should not happen, but just in case.
 		m_ptrBatchQueue->cancelAndClear();
 	}
-	
+
 	bool const was_below_fix_orientation = isBelowFixOrientation(m_curFilter);
 	bool const was_below_select_content = isBelowSelectContent(m_curFilter);
 	m_curFilter = selected.front().top();
 	bool const now_below_fix_orientation = isBelowFixOrientation(m_curFilter);
 	bool const now_below_select_content = isBelowSelectContent(m_curFilter);
-	
+
 	m_ptrStages->filterAt(m_curFilter)->selected();
-	
+
 	updateSortOptions();
 
 	// Propagate context boxes down the stage list, if necessary.
@@ -1123,10 +1122,10 @@ MainWindow::filterSelectionChanged(QItemSelection const& selected)
 			m_ptrPageOrientationPropagator->propagate(*m_ptrPages);
 		} // Otherwise probably no project is loaded.
 	}
-	
+
 	focusButton->setChecked(true); // Should go before resetThumbSequence().
 	resetThumbSequence(currentPageOrderProvider());
-	
+
 	updateMainArea();
 }
 
@@ -1163,7 +1162,7 @@ MainWindow::startBatchProcessing()
 	}
 
 	m_ptrInteractiveQueue->cancelAndClear();
-	
+
 	m_ptrBatchQueue.reset(
 		new ProcessingTaskQueue(
 			currentPageOrderProvider().get()
@@ -1179,7 +1178,7 @@ MainWindow::startBatchProcessing()
 	}
 
 	focusButton->setChecked(true);
-	
+
 	removeFilterOptionsWidget();
 	filterList->setBatchProcessingInProgress(true);
 	filterList->setEnabled(false);
@@ -1206,7 +1205,7 @@ MainWindow::stopBatchProcessing(MainAreaAction main_area)
 	if (!isBatchProcessingInProgress()) {
 		return;
 	}
-	
+
 	PageInfo const page(m_ptrBatchQueue->selectedPage());
 	if (!page.isNull()) {
 		m_ptrThumbSequence->setSelection(page.id());
@@ -1214,7 +1213,7 @@ MainWindow::stopBatchProcessing(MainAreaAction main_area)
 
 	m_ptrBatchQueue->cancelAndClear();
 	m_ptrBatchQueue.reset();
-	
+
 	filterList->setBatchProcessingInProgress(false);
 	filterList->setEnabled(true);
 
@@ -1240,7 +1239,7 @@ MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& r
 	if (task->isCancelled()) {
 		return;
 	}
-	
+
 	if (!isBatchProcessingInProgress()) {
 		if (!result->filter()) {
 			// Error loading file.  No special action is necessary.
@@ -1249,7 +1248,7 @@ MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& r
 			int const idx = m_ptrStages->findFilter(result->filter());
 			assert(idx >= 0);
 			m_curFilter = idx;
-			
+
 			ScopedIncDec<int> selection_guard(m_ignoreSelectionChanges);
 			filterList->selectRow(idx);
 		}
@@ -1258,18 +1257,18 @@ MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& r
 	// This needs to be done even if batch processing is taking place,
 	// for instance because thumbnail invalidation is done from here.
 	result->updateUI(this);
-	
+
 	if (isBatchProcessingInProgress()) {
 		if (m_ptrBatchQueue->allProcessed()) {
 			stopBatchProcessing();
-			
+
 			QApplication::alert(this); // Flash the taskbar entry.
 			if (m_checkBeepWhenFinished()) {
 				QApplication::beep();
 			}
 
 			if (m_selectedPage.get(getCurrentView()) == m_ptrThumbSequence->lastPage().id()) {
-				// If batch processing finished at the last page, jump to the first one.	
+				// If batch processing finished at the last page, jump to the first one.
 				goFirstPage();
 			}
 
@@ -1321,7 +1320,7 @@ MainWindow::fixedDpiSubmitted()
 	PageInfo const selected_page_before(m_ptrThumbSequence->selectionLeader());
 
 	m_ptrPages->updateMetadataFrom(m_ptrFixDpiDialog->files());
-	
+
 	// The thumbnail list also stores page metadata, including the DPI.
 	m_ptrThumbSequence->reset(
 		m_ptrPages->toPageSequence(getCurrentView()),
@@ -1334,7 +1333,7 @@ MainWindow::fixedDpiSubmitted()
 	// Note that imageId() isn't supposed to change - we check just in case.
 	if (selected_page_before.imageId() != selected_page_after.imageId() ||
 		selected_page_before.metadata() != selected_page_after.metadata()) {
-		
+
 		reloadRequested();
 	}
 }
@@ -1346,7 +1345,7 @@ MainWindow::saveProjectTriggered()
 		saveProjectAsTriggered();
 		return;
 	}
-	
+
 	if (saveProjectWithFeedback(m_projectFile)) {
 		updateWindowTitle();
 	}
@@ -1364,7 +1363,7 @@ MainWindow::saveProjectAsTriggered()
 		QSettings settings;
 		project_dir = settings.value("project/lastDir").toString();
 	}
-	
+
 	QString project_file(
 		QFileDialog::getSaveFileName(
 			this, QString(), project_dir,
@@ -1374,21 +1373,21 @@ MainWindow::saveProjectAsTriggered()
 	if (project_file.isEmpty()) {
 		return;
 	}
-	
+
 	if (!project_file.endsWith(".ScanTailor", Qt::CaseInsensitive)) {
 		project_file += ".ScanTailor";
 	}
-	
+
 	if (saveProjectWithFeedback(project_file)) {
 		m_projectFile = project_file;
 		updateWindowTitle();
-		
+
 		QSettings settings;
 		settings.setValue(
 			"project/lastDir",
 			QFileInfo(m_projectFile).absolutePath()
 		);
-		
+
 		RecentProjects rp;
 		rp.read();
 		rp.setMostRecent(m_projectFile);
@@ -1402,7 +1401,7 @@ MainWindow::newProject()
 	if (!closeProjectInteractive()) {
 		return;
 	}
-	
+
 	// It will delete itself when it's done.
 	ProjectCreationContext* context = new ProjectCreationContext(this);
 	connect(
@@ -1429,10 +1428,10 @@ MainWindow::openProject()
 	if (!closeProjectInteractive()) {
 		return;
 	}
-	
+
 	QSettings settings;
 	QString const project_dir(settings.value("project/lastDir").toString());
-	
+
 	QString const project_file(
 		QFileDialog::getOpenFileName(
 			this, tr("Open Project"), project_dir,
@@ -1443,7 +1442,7 @@ MainWindow::openProject()
 		// Cancelled by user.
 		return;
 	}
-	
+
 	openProject(project_file);
 }
 
@@ -1458,7 +1457,7 @@ MainWindow::openProject(QString const& project_file)
 		);
 		return;
 	}
-	
+
 	QDomDocument doc;
 	if (!doc.setContent(&file)) {
 		QMessageBox::warning(
@@ -1467,9 +1466,9 @@ MainWindow::openProject(QString const& project_file)
 		);
 		return;
 	}
-	
+
 	file.close();
-	
+
 	ProjectOpeningContext* context = new ProjectOpeningContext(this, project_file, doc);
 	connect(context, SIGNAL(done(ProjectOpeningContext*)), SLOT(projectOpened(ProjectOpeningContext*)));
 	context->proceed();
@@ -1482,13 +1481,13 @@ MainWindow::projectOpened(ProjectOpeningContext* context)
 	rp.read();
 	rp.setMostRecent(context->projectFile());
 	rp.write();
-	
+
 	QSettings settings;
 	settings.setValue(
 		"project/lastDir",
 		QFileInfo(context->projectFile()).absolutePath()
 	);
-	
+
 	switchToNewProject(
 		context->projectReader()->pages(),
 		context->projectReader()->outputDirectory(),
@@ -1561,10 +1560,10 @@ void
 MainWindow::removeFilterOptionsWidget()
 {
 	removeWidgetsFromLayout(m_pOptionsFrameLayout);
-	
+
 	// Delete the old widget we were owning, if any.
 	m_optionsWidgetCleanup.clear();
-	
+
 	m_ptrOptionsWidget = 0;
 }
 
@@ -1661,28 +1660,28 @@ void
 MainWindow::loadPageInteractive(PageInfo const& page)
 {
 	assert(!isBatchProcessingInProgress());
-	
+
 	m_ptrInteractiveQueue->cancelAndClear();
-	
+
 	if (isOutputFilter() && !checkReadyForOutput(&page.id())) {
 		filterList->setBatchProcessingPossible(false);
-		
+
 		// Switch to the first page - the user will need
 		// to process all pages in batch mode.
 		m_ptrThumbSequence->setSelection(m_ptrThumbSequence->firstPage().id());
-		
+
 		QString const err_text(
 			tr("Output is not yet possible, as the final size"
 			" of pages is not yet known.\nTo determine it,"
 			" run batch processing at \"Select Content\" or"
 			" \"Margins\".")
 		);
-		
+
 		removeFilterOptionsWidget();
 		setImageWidget(new ErrorWidget(err_text), TRANSFER_OWNERSHIP);
 		return;
 	}
-	
+
 	if (!isBatchProcessingInProgress()) {
 		if (m_pImageFrameLayout->indexOf(m_ptrProcessingIndicationWidget.get()) != -1) {
 			m_ptrProcessingIndicationWidget->processingRestartedEffect();
@@ -1690,7 +1689,7 @@ MainWindow::loadPageInteractive(PageInfo const& page)
 		setImageWidget(m_ptrProcessingIndicationWidget.get(), KEEP_OWNERSHIP);
 		m_ptrStages->filterAt(m_curFilter)->preUpdateUI(this, page.id());
 	}
-	
+
 	assert(m_ptrThumbnailCache.get());
 
 	m_ptrInteractiveQueue->cancelAndClear();
@@ -1724,7 +1723,7 @@ MainWindow::closeProjectInteractive()
 	if (!isProjectLoaded()) {
 		return true;
 	}
-	
+
 	if (m_projectFile.isEmpty()) {
 		switch (promptProjectSave()) {
 			case SAVE:
@@ -1738,16 +1737,16 @@ MainWindow::closeProjectInteractive()
 		closeProjectWithoutSaving();
 		return true;
 	}
-	
+
 	QFileInfo const project_file(m_projectFile);
 	QFileInfo const backup_file(
 		project_file.absoluteDir(),
-		QString::fromAscii("Backup.")+project_file.fileName()
+		QString::fromLatin1("Backup.")+project_file.fileName()
 	);
 	QString const backup_file_path(backup_file.absoluteFilePath());
-	
+
 	ProjectWriter writer(m_ptrPages, m_selectedPage, m_outFileNameGen);
-	
+
 	if (!writer.write(backup_file_path, m_ptrStages->filters())) {
 		// Backup file could not be written???
 		QFile::remove(backup_file_path);
@@ -1763,14 +1762,14 @@ MainWindow::closeProjectInteractive()
 		closeProjectWithoutSaving();
 		return true;
 	}
-	
+
 	if (compareFiles(m_projectFile, backup_file_path)) {
 		// The project hasn't really changed.
 		QFile::remove(backup_file_path);
 		closeProjectWithoutSaving();
 		return true;
 	}
-	
+
 	switch (promptProjectSave()) {
 		case SAVE:
 			if (!Utils::overwritingRename(
@@ -1788,11 +1787,11 @@ MainWindow::closeProjectInteractive()
 		case CANCEL:
 			return false;
 	}
-	
+
 	closeProjectWithoutSaving();
 	return true;
 }
-	
+
 void
 MainWindow::closeProjectWithoutSaving()
 {
@@ -1804,7 +1803,7 @@ bool
 MainWindow::saveProjectWithFeedback(QString const& project_file)
 {
 	ProjectWriter writer(m_ptrPages, m_selectedPage, m_outFileNameGen);
-	
+
 	if (!writer.write(project_file, m_ptrStages->filters())) {
 		QMessageBox::warning(
 			this, tr("Error"),
@@ -1812,7 +1811,7 @@ MainWindow::saveProjectWithFeedback(QString const& project_file)
 		);
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -1832,7 +1831,7 @@ MainWindow::showInsertFileDialog(BeforeOrAfter before_or_after, ImageId const& e
 	public:
 		ProxyModel(ProjectPages const& pages) {
 			setDynamicSortFilter(true);
-			
+
 			PageSequence const sequence(pages.toPageSequence(IMAGE_VIEW));
 			unsigned const count = sequence.numPages();
 			for (unsigned i = 0; i < count; ++i) {
@@ -1842,21 +1841,24 @@ MainWindow::showInsertFileDialog(BeforeOrAfter before_or_after, ImageId const& e
 		}
 	protected:
 		virtual bool filterAcceptsRow(int source_row, QModelIndex const& source_parent) const {
-			QModelIndex const idx(source_parent.child(source_row, 0));
+			// FIXME unsure of the port to Qt6 below:
+			// QModelIndex const idx(source_parent.child(source_row, 0));
+			// was replaced by
+			QModelIndex const idx = source_parent.model()->index(source_row, 0, source_parent);
 			QVariant const data(idx.data(QFileSystemModel::FilePathRole));
 			if (data.isNull()) {
 				return true;
 			}
 			return !m_inProjectFiles.contains(QFileInfo(data.toString()));
 		}
-		
+
 		virtual bool lessThan(QModelIndex const& left, QModelIndex const& right) const {
 			return left.row() < right.row();
 		}
 	private:
 		QFileInfoList m_inProjectFiles;
 	};
-	
+
 	std::auto_ptr<QFileDialog> dialog(
 		new QFileDialog(
 			this, tr("Files to insert"),
@@ -1872,7 +1874,7 @@ MainWindow::showInsertFileDialog(BeforeOrAfter before_or_after, ImageId const& e
 	if (dialog->exec() != QDialog::Accepted) {
 		return;
 	}
-	
+
 	QStringList files(dialog->selectedFiles());
 	if (files.empty()) {
 		return;
@@ -1885,9 +1887,9 @@ MainWindow::showInsertFileDialog(BeforeOrAfter before_or_after, ImageId const& e
 	// I suspect on some platforms it may be possible to select the same file twice,
 	// so to be safe, remove duplicates.
 	files.erase(std::unique(files.begin(), files.end()), files.end());
-	
+
 	using namespace boost::lambda;
-	
+
 	std::vector<ImageFileInfo> new_files;
 	std::vector<QString> loaded_files;
 	std::vector<QString> failed_files; // Those we failed to read metadata from.
@@ -1990,7 +1992,7 @@ MainWindow::insertImage(ImageInfo const& new_image,
 		// one will be inserted BEFORE the second one.
 		std::reverse(pages.begin(), pages.end());
 	}
-	
+
 	BOOST_FOREACH(PageInfo const& page_info, pages) {
 		m_outFileNameGen.disambiguator()->registerFile(page_info.imageId().filePath());
 		m_ptrThumbSequence->insert(page_info, before_or_after, existing);
@@ -2008,11 +2010,11 @@ MainWindow::removeFromProject(std::set<PageId> const& pages)
 
 	m_ptrPages->removePages(pages);
 	m_ptrThumbSequence->removePages(pages);
-	
+
 	if (m_ptrThumbSequence->selectionLeader().isNull()) {
 		m_ptrThumbSequence->setSelection(m_ptrThumbSequence->firstPage().id());
 	}
-	
+
 	updateMainArea();
 }
 
@@ -2039,9 +2041,9 @@ MainWindow::eraseOutputFiles(std::set<PageId> const& pages)
 				erase_variations.push_back(PageId::RIGHT_PAGE);
 				break;
 		}
-		
+
 		BOOST_FOREACH(PageId::SubPage subpage, erase_variations) {
-			QFile::remove(m_outFileNameGen.filePathFor(PageId(page_id.imageId(), subpage))); 
+			QFile::remove(m_outFileNameGen.filePathFor(PageId(page_id.imageId(), subpage)));
 		}
 	}
 }
@@ -2056,7 +2058,7 @@ MainWindow::createCompositeTask(
 	IntrusivePtr<select_content::Task> select_content_task;
 	IntrusivePtr<page_layout::Task> page_layout_task;
 	IntrusivePtr<output::Task> output_task;
-	
+
 	if (batch) {
 		debug = false;
 	}
@@ -2098,7 +2100,7 @@ MainWindow::createCompositeTask(
 		debug = false;
 	}
 	assert(fix_orientation_task);
-	
+
 	return BackgroundTaskPtr(
 		new LoadFileTask(
 			batch ? BackgroundTask::BATCH : BackgroundTask::INTERACTIVE,
@@ -2116,7 +2118,7 @@ MainWindow::createCompositeCacheDrivenTask(int const last_filter_idx)
 	IntrusivePtr<select_content::CacheDrivenTask> select_content_task;
 	IntrusivePtr<page_layout::CacheDrivenTask> page_layout_task;
 	IntrusivePtr<output::CacheDrivenTask> output_task;
-	
+
 	if (last_filter_idx >= m_ptrStages->outputFilterIdx()) {
 		output_task = m_ptrStages->outputFilter()
 				->createCacheDrivenTask(m_outFileNameGen);
@@ -2141,9 +2143,9 @@ MainWindow::createCompositeCacheDrivenTask(int const last_filter_idx)
 		fix_orientation_task = m_ptrStages->fixOrientationFilter()
 				->createCacheDrivenTask(page_split_task);
 	}
-	
+
 	assert(fix_orientation_task);
-	
+
 	return fix_orientation_task;
 }
 

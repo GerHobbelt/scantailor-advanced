@@ -208,15 +208,16 @@ ConsoleBatch::process()
 	}
 
 	for (int j=startFilterIdx; j<=endFilterIdx; j++) {
-		if (cli.isVerbose())
+		if (cli.isVerbose()) {
 			std::cout << "Filter: " << (j+1) << "\n";
-
+		}
 		PageSequence page_sequence = m_ptrPages->toPageSequence(PAGE_VIEW);
 		setupFilter(j, page_sequence.selectAll());
 		for (unsigned i=0; i<page_sequence.numPages(); i++) {
 			PageInfo page = page_sequence.pageAt(i);
-			if (cli.isVerbose())
-				std::cout << "\tProcessing: " << page.imageId().filePath().toAscii().constData() << "\n";
+			if (cli.isVerbose()) {
+				std::cout << "\tProcessing: " << page.imageId().filePath().toUtf8().constData() << "\n";
+			}
 			BackgroundTaskPtr bgTask = createCompositeTask(page, j);
 			(*bgTask)();
 		}

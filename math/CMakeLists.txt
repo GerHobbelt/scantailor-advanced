@@ -1,5 +1,10 @@
 PROJECT("Math library")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui)
+
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
 SET(
@@ -44,6 +49,7 @@ SET(
 SOURCE_GROUP("Sources\\Differentiation Framework" FILES ${ADIFF_SOURCES})
 
 ADD_LIBRARY(math STATIC ${GENERIC_SOURCES} ${SPFIT_SOURCES} ${ADIFF_SOURCES})
+target_link_libraries(math PRIVATE Qt6::Core Qt6::Gui)
 
 ADD_SUBDIRECTORY(spfit/tests)
 ADD_SUBDIRECTORY(adiff/tests)
