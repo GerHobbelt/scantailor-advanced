@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 #include <Qt>
 #ifndef Q_MOC_RUN
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #endif
 
 struct InteractiveXSpline::NoOp
@@ -64,7 +64,7 @@ InteractiveXSpline::setSpline(XSpline const& spline)
 			boost::bind(&InteractiveXSpline::controlPointPosition, this, i)
 		);
 		new_control_points[i].point.setMoveRequestCallback(
-			boost::bind(&InteractiveXSpline::controlPointMoveRequest, this, i, _1)
+			boost::bind(&InteractiveXSpline::controlPointMoveRequest, this, i, boost::placeholders::_1)
 		);
 		new_control_points[i].point.setDragFinishedCallback(
 			boost::bind(&InteractiveXSpline::dragFinished, this)

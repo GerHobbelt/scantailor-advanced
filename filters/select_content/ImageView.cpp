@@ -32,7 +32,7 @@
 #include <QDebug>
 #include <Qt>
 #ifndef Q_MOC_RUN
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #endif
 #include <algorithm>
 
@@ -68,7 +68,7 @@ ImageView::ImageView(
 			boost::bind(&ImageView::cornerPosition, this, masks_by_corner[i])
 		);
 		m_corners[i].setMoveRequestCallback(
-			boost::bind(&ImageView::cornerMoveRequest, this, masks_by_corner[i], _1)
+			boost::bind(&ImageView::cornerMoveRequest, this, masks_by_corner[i], boost::placeholders::_1)
 		);
 		m_corners[i].setDragFinishedCallback(
 			boost::bind(&ImageView::dragFinished, this)
@@ -88,7 +88,7 @@ ImageView::ImageView(
 			boost::bind(&ImageView::edgePosition, this, masks_by_edge[i])
 		);
 		m_edges[i].setMoveRequestCallback(
-			boost::bind(&ImageView::edgeMoveRequest, this, masks_by_edge[i], _1)
+			boost::bind(&ImageView::edgeMoveRequest, this, masks_by_edge[i], boost::placeholders::_1)
 		);
 		m_edges[i].setDragFinishedCallback(
 			boost::bind(&ImageView::dragFinished, this)

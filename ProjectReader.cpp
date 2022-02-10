@@ -27,7 +27,7 @@
 #include <QDomElement>
 #include <QDomNode>
 #ifndef Q_MOC_RUN
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #endif
 #include <set>
 
@@ -73,7 +73,7 @@ ProjectReader::ProjectReader(QDomDocument const& doc)
 	);
 	m_ptrDisambiguator.reset(
 		new FileNameDisambiguator(
-			disambig_el, boost::bind(&ProjectReader::expandFilePath, this, _1)
+			disambig_el, boost::bind(&ProjectReader::expandFilePath, this, boost::placeholders::_1)
 		)
 	);
 }

@@ -35,7 +35,7 @@
 #include <QPainterPath>
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/ref.hpp>
 #endif
 #include <vector>
@@ -59,7 +59,7 @@ ZoneContextMenuInteraction::create(
 {
 	return create(
 		context, interaction,
-		boost::bind(&ZoneContextMenuInteraction::defaultMenuCustomizer, _1, _2)
+		boost::bind(&ZoneContextMenuInteraction::defaultMenuCustomizer, boost::placeholders::_1, boost::placeholders::_2)
 	);
 }
 

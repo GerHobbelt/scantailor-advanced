@@ -63,7 +63,7 @@
 #include "config.h"
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #endif
 #include <QImage>
@@ -481,8 +481,8 @@ QImage
 OutputGenerator::processAsIs(
 	FilterData const& input, TaskStatus const& status,
 	ZoneSet const& fill_zones,
-	DepthPerception const& depth_perception,
-	DebugImages* const dbg) const
+	DepthPerception const& /* depth_perception */,
+	DebugImages* const /*dbg*/) const
 {
 	uint8_t const dominant_gray = reserveBlackAndWhite<uint8_t>(
 		calcDominantBackgroundGrayLevel(input.grayImage())
@@ -1062,7 +1062,7 @@ OutputGenerator::processWithDewarping(
 		)
 	);
 	boost::function<QPointF(QPointF const&)> const orig_to_output(
-		boost::bind(&DewarpingPointMapper::mapToDewarpedSpace, mapper, _1)
+		boost::bind(&DewarpingPointMapper::mapToDewarpedSpace, mapper, boost::placeholders::_1)
 	);
 
 	if (render_params.binaryOutput()) {	
@@ -1819,7 +1819,7 @@ OutputGenerator::applyFillZonesInPlace(QImage& img, ZoneSet const& zones) const
 {
 	typedef QPointF (QTransform::*MapPointFunc)(QPointF const&) const;
 	applyFillZonesInPlace(
-		img, zones, boost::bind((MapPointFunc)&QTransform::map, m_xform.transform(), _1)
+		img, zones, boost::bind((MapPointFunc)&QTransform::map, m_xform.transform(), boost::placeholders::_1)
 	);
 }
 
@@ -1850,7 +1850,7 @@ OutputGenerator::applyFillZonesInPlace(
 {
 	typedef QPointF (QTransform::*MapPointFunc)(QPointF const&) const;
 	applyFillZonesInPlace(
-		img, zones, boost::bind((MapPointFunc)&QTransform::map, m_xform.transform(), _1)
+		img, zones, boost::bind((MapPointFunc)&QTransform::map, m_xform.transform(), boost::placeholders::_1)
 	);
 }
 

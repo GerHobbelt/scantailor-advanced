@@ -44,7 +44,7 @@
 #include <QDebug>
 #ifndef Q_MOC_RUN
 #include <boost/array.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/foreach.hpp>
 #endif
 #include <vector>
@@ -117,8 +117,8 @@ DewarpingView::DewarpingView(
 		spline->setModifiedCallback(boost::bind(&DewarpingView::curveModified, this, curve_idx));
 		spline->setDragFinishedCallback(boost::bind(&DewarpingView::dragFinished, this));
 		spline->setStorageTransform(
-			boost::bind(&DewarpingView::sourceToWidget, this, _1),
-			boost::bind(&DewarpingView::widgetToSource, this, _1)
+			boost::bind(&DewarpingView::sourceToWidget, this, boost::placeholders::_1),
+			boost::bind(&DewarpingView::widgetToSource, this, boost::placeholders::_1)
 		);
 		makeLastFollower(*spline);
 	}
