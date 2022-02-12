@@ -49,7 +49,7 @@
 namespace page_layout
 {
 
-Filter::Filter(IntrusivePtr<ProjectPages> const& pages,
+Filter::Filter(std::shared_ptr<ProjectPages> const& pages,
 	PageSelectionAccessor const& page_selection_accessor)
 :	m_ptrPages(pages),
 	m_ptrSettings(new Settings),

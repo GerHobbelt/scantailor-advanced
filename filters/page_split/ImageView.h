@@ -49,7 +49,7 @@ class ImageView :
 public:
 	ImageView(QImage const& image, QImage const& downscaled_image,
 		ImageTransformation const& xform, PageLayout const& layout,
-		IntrusivePtr<ProjectPages> const& pages, ImageId const& image_id,
+		std::shared_ptr<ProjectPages> const& pages, ImageId const& image_id,
 		bool left_half_removed, bool right_half_removed);
 	
 	virtual ~ImageView();
@@ -112,7 +112,7 @@ private:
 
 	static QLineF customInscribedCutterLine(QLineF const& line, QRectF const& rect);
 
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	ImageId m_imageId;
 	DraggablePoint m_handles[2][2];
 	ObjectDragHandler m_handleInteractors[2][2];

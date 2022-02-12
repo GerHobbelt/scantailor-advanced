@@ -42,7 +42,7 @@ class LoadFileTask : public BackgroundTask
 public:
 	LoadFileTask(Type type, PageInfo const& page,
 		IntrusivePtr<ThumbnailPixmapCache> const& thumbnail_cache,
-		IntrusivePtr<ProjectPages> const& pages,
+		std::shared_ptr<ProjectPages> const& pages,
 		IntrusivePtr<fix_orientation::Task> const& next_task);
 	
 	virtual ~LoadFileTask();
@@ -58,7 +58,7 @@ private:
 	IntrusivePtr<ThumbnailPixmapCache> m_ptrThumbnailCache;
 	ImageId m_imageId;
 	ImageMetadata m_imageMetadata;
-	IntrusivePtr<ProjectPages> const m_ptrPages;
+	std::shared_ptr<ProjectPages> const m_ptrPages;
 	IntrusivePtr<fix_orientation::Task> const m_ptrNextTask;
 };
 

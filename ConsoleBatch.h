@@ -39,7 +39,6 @@
 #include "PageSelectionAccessor.h"
 #include "ProjectReader.h"
 
-
 class ConsoleBatch
 {
 	// Member-wise copying is OK.
@@ -57,8 +56,8 @@ private:
 	bool batch;
 	bool debug;
 	IntrusivePtr<FileNameDisambiguator> m_ptrDisambiguator;
-	IntrusivePtr<ProjectPages> m_ptrPages;
-	IntrusivePtr<StageSequence> m_ptrStages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
+	std::shared_ptr<StageSequence> m_ptrStages;
 	OutputFileNameGenerator m_outFileNameGen;
 	IntrusivePtr<ThumbnailPixmapCache> m_ptrThumbnailCache;
 	std::unique_ptr<ProjectReader> m_ptrReader;

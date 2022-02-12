@@ -346,7 +346,7 @@ MainWindow::selectedRanges() const
 
 void
 MainWindow::switchToNewProject(
-	IntrusivePtr<ProjectPages> const& pages,
+	std::shared_ptr<ProjectPages> const& pages,
 	QString const& out_dir, QString const& project_file_path,
 	ProjectReader const* project_reader)
 {
@@ -1413,7 +1413,7 @@ MainWindow::newProject()
 void
 MainWindow::newProjectCreated(ProjectCreationContext* context)
 {
-	IntrusivePtr<ProjectPages> pages(
+	std::shared_ptr<ProjectPages> pages(
 		new ProjectPages(
 			context->files(), ProjectPages::AUTO_PAGES,
 			context->layoutDirection()
@@ -1795,7 +1795,7 @@ MainWindow::closeProjectInteractive()
 void
 MainWindow::closeProjectWithoutSaving()
 {
-	IntrusivePtr<ProjectPages> pages(new ProjectPages());
+	std::shared_ptr<ProjectPages> pages(new ProjectPages());
 	switchToNewProject(pages, QString());
 }
 

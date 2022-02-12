@@ -75,7 +75,7 @@ public:
 	
 	
 	OptionsWidget(IntrusivePtr<Settings> const& settings,
-		IntrusivePtr<ProjectPages> const& page_sequence,
+		std::shared_ptr<ProjectPages> const& page_sequence,
 		PageSelectionAccessor const& page_selection_accessor);
 	
 	virtual ~OptionsWidget();
@@ -101,7 +101,7 @@ private:
 	void commitCurrentParams();
 	
 	IntrusivePtr<Settings> m_ptrSettings;
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	PageSelectionAccessor m_pageSelectionAccessor;
 	PageId m_pageId;
 	UiData m_uiData;

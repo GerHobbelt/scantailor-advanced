@@ -20,7 +20,7 @@
 #include "ProjectPages.h"
 #include <boost/foreach.hpp>
 
-StageSequence::StageSequence(IntrusivePtr<ProjectPages> const& pages,
+StageSequence::StageSequence(std::shared_ptr<ProjectPages> const& pages,
 	PageSelectionAccessor const& page_selection_accessor)
 :	m_ptrFixOrientationFilter(new fix_orientation::Filter(page_selection_accessor)),
 	m_ptrPageSplitFilter(new page_split::Filter(pages, page_selection_accessor)),

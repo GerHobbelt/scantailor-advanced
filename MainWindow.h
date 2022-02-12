@@ -186,7 +186,7 @@ private:
 	virtual IntrusivePtr<AbstractCommand0<void> > relinkingDialogRequester();
 	
 	void switchToNewProject(
-		IntrusivePtr<ProjectPages> const& pages,
+		std::shared_ptr<ProjectPages> const& pages,
 		QString const& out_dir,
 		QString const& project_file_path = QString(),
 		ProjectReader const* project_reader = 0);
@@ -273,8 +273,8 @@ private:
 	PageSelectionAccessor newPageSelectionAccessor();
 	
 	QSizeF m_maxLogicalThumbSize;
-	IntrusivePtr<ProjectPages> m_ptrPages;
-	IntrusivePtr<StageSequence> m_ptrStages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
+	std::shared_ptr<StageSequence> m_ptrStages;
 	QString m_projectFile;
 	OutputFileNameGenerator m_outFileNameGen;
 	IntrusivePtr<ThumbnailPixmapCache> m_ptrThumbnailCache;

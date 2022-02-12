@@ -61,7 +61,7 @@ private:
 LoadFileTask::LoadFileTask(
 	Type type, PageInfo const& page,
 	IntrusivePtr<ThumbnailPixmapCache> const& thumbnail_cache,
-	IntrusivePtr<ProjectPages> const& pages,
+	std::shared_ptr<ProjectPages> const& pages,
 	IntrusivePtr<fix_orientation::Task> const& next_task)
 :	BackgroundTask(type),
 	m_ptrThumbnailCache(thumbnail_cache),

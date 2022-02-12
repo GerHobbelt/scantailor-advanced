@@ -34,7 +34,7 @@ public:
 	
 	virtual ~StageListView();
 	
-	void setStages(IntrusivePtr<StageSequence> const& stages);
+	void setStages(std::shared_ptr<StageSequence> const& stages);
 	
 	virtual QSize sizeHint() const { return m_sizeHint; }
 signals:

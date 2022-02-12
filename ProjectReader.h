@@ -52,7 +52,7 @@ public:
 	
 	QString const& outputDirectory() const { return m_outDir; }
 	
-	IntrusivePtr<ProjectPages> const& pages() const { return m_ptrPages; }
+	std::shared_ptr<ProjectPages> const& pages() const { return m_ptrPages; }
 
 	SelectedPage const& selectedPage() const { return m_selectedPage; }
 
@@ -106,7 +106,7 @@ private:
 	ImageMap m_imageMap;
 	PageMap m_pageMap;
 	SelectedPage m_selectedPage;
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	IntrusivePtr<FileNameDisambiguator> m_ptrDisambiguator;
 };
 

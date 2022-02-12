@@ -55,7 +55,7 @@ class Filter : public AbstractFilter
 	DECLARE_NON_COPYABLE(Filter)
 	Q_DECLARE_TR_FUNCTIONS(page_layout::Filter)
 public:
-	Filter(IntrusivePtr<ProjectPages> const& page_sequence,
+	Filter(std::shared_ptr<ProjectPages> const& page_sequence,
 		PageSelectionAccessor const& page_selection_accessor);
 	
 	virtual ~Filter();
@@ -106,7 +106,7 @@ private:
 		QDomDocument& doc, QDomElement& filter_el,
 		PageId const& page_id, int numeric_id) const;
 	
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	IntrusivePtr<Settings> m_ptrSettings;
 	SafeDeletingQObjectPtr<OptionsWidget> m_ptrOptionsWidget;
 	std::vector<PageOrderOption> m_pageOrderOptions;

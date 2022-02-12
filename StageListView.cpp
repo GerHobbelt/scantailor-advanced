@@ -45,7 +45,7 @@
 class StageListView::Model : public QAbstractTableModel
 {
 public:
-	Model(QObject* parent, IntrusivePtr<StageSequence> const& stages);
+	Model(QObject* parent, std::shared_ptr<StageSequence> const& stages);
 	
 	void updateBatchProcessingAnimation(
 		int selected_row, QPixmap const& animation_frame);
@@ -58,7 +58,7 @@ public:
 	
 	virtual QVariant data(QModelIndex const& index, int role) const;
 private:
-	IntrusivePtr<StageSequence> m_ptrStages;
+	std::shared_ptr<StageSequence> m_ptrStages;
 	QPixmap m_curAnimationFrame;
 	int m_curSelectedRow;
 };
@@ -147,7 +147,7 @@ StageListView::~StageListView()
 }
 
 void
-StageListView::setStages(IntrusivePtr<StageSequence> const& stages)
+StageListView::setStages(std::shared_ptr<StageSequence> const& stages)
 {
 	if (QAbstractItemModel* m = model()) {
 		// Q*View classes don't own their models.
@@ -367,7 +367,7 @@ StageListView::selectedRow() const
 /*========================= StageListView::Model ======================*/
 
 StageListView::Model::Model(
-	QObject* parent, IntrusivePtr<StageSequence> const& stages)
+	QObject* parent, std::shared_ptr<StageSequence> const& stages)
 :	QAbstractTableModel(parent),
 	m_ptrStages(stages),
 	m_curSelectedRow(0)

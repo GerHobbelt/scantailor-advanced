@@ -44,7 +44,7 @@ class RelinkablePath;
 class AbstractRelinker;
 class QDomElement;
 
-class ProjectPages : public QObject, public RefCountable
+class ProjectPages : public QObject
 {
 	Q_OBJECT
 	DECLARE_NON_COPYABLE(ProjectPages)

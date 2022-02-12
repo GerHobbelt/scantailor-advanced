@@ -36,13 +36,13 @@ class ProjectPages;
 class PageSelectionAccessor;
 class AbstractRelinker;
 
-class StageSequence : public RefCountable
+class StageSequence 
 {
 	DECLARE_NON_COPYABLE(StageSequence)
 public:
 	typedef IntrusivePtr<AbstractFilter> FilterPtr;
 	
-	StageSequence(IntrusivePtr<ProjectPages> const& pages,
+	StageSequence(std::shared_ptr<ProjectPages> const& pages,
 		PageSelectionAccessor const& page_selection_accessor);
 	
 	void performRelinking(AbstractRelinker const& relinker);

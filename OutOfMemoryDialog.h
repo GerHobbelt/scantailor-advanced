@@ -36,8 +36,8 @@ public:
 
 	void setParams(
 		QString const& project_file, // may be empty
-		IntrusivePtr<StageSequence> const& stages,
-		IntrusivePtr<ProjectPages> const& pages,
+		std::shared_ptr<StageSequence> const& stages,
+		std::shared_ptr<ProjectPages> const& pages,
 		SelectedPage const& selected_page,
 		OutputFileNameGenerator const& out_file_name_gen);
 private slots:
@@ -51,8 +51,8 @@ private:
 
 	Ui::OutOfMemoryDialog ui;
 	QString m_projectFile;
-	IntrusivePtr<StageSequence> m_ptrStages;
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<StageSequence> m_ptrStages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	SelectedPage m_selectedPage;
 	OutputFileNameGenerator m_outFileNameGen;
 };

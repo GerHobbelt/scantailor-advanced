@@ -40,7 +40,7 @@ namespace page_split
 ImageView::ImageView(
 	QImage const& image, QImage const& downscaled_image,
 	ImageTransformation const& xform, PageLayout const& layout,
-	IntrusivePtr<ProjectPages> const& pages, ImageId const& image_id,
+	std::shared_ptr<ProjectPages> const& pages, ImageId const& image_id,
 	bool left_half_removed, bool right_half_removed)
 :	ImageViewBase(
 		image, downscaled_image,

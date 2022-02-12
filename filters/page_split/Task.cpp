@@ -54,7 +54,7 @@ class Task::UiUpdater : public FilterResult
 {
 public:
 	UiUpdater(IntrusivePtr<Filter> const& filter,
-		IntrusivePtr<ProjectPages> const& pages,
+		std::shared_ptr<ProjectPages> const& pages,
 		std::unique_ptr<DebugImages> dbg_img,
 		QImage const& image, PageInfo const& page_info,
 		ImageTransformation const& xform,
@@ -66,7 +66,7 @@ public:
 	virtual IntrusivePtr<AbstractFilter> filter() { return m_ptrFilter; }
 private:
 	IntrusivePtr<Filter> m_ptrFilter;
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	std::unique_ptr<DebugImages> m_ptrDbg;
 	QImage m_image;
 	QImage m_downscaledImage;
@@ -93,7 +93,7 @@ static ProjectPages::LayoutType toPageLayoutType(PageLayout const& layout)
 Task::Task(
 	IntrusivePtr<Filter> const& filter,
 	IntrusivePtr<Settings> const& settings,
-	IntrusivePtr<ProjectPages> const& pages,
+	std::shared_ptr<ProjectPages> const& pages,
 	IntrusivePtr<deskew::Task> const& next_task,
 	PageInfo const& page_info,
 	bool const batch_processing, bool const debug)
@@ -214,7 +214,7 @@ Task::process(TaskStatus const& status, FilterData const& data)
 
 Task::UiUpdater::UiUpdater(
 	IntrusivePtr<Filter> const& filter,
-	IntrusivePtr<ProjectPages> const& pages,
+	std::shared_ptr<ProjectPages> const& pages,
 	std::unique_ptr<DebugImages> dbg_img,
 	QImage const& image, PageInfo const& page_info,
 	ImageTransformation const& xform,

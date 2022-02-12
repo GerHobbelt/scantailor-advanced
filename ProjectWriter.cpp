@@ -38,7 +38,7 @@
 #include <assert.h>
 
 ProjectWriter::ProjectWriter(
-	IntrusivePtr<ProjectPages> const& page_sequence,
+	std::shared_ptr<ProjectPages> const& page_sequence,
 	SelectedPage const& selected_page,
 	OutputFileNameGenerator const& out_file_name_gen)
 :	m_pageSequence(page_sequence->toPageSequence(PAGE_VIEW)),

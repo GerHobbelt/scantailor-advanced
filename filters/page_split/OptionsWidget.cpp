@@ -37,7 +37,7 @@ namespace page_split
 
 OptionsWidget::OptionsWidget(
 	IntrusivePtr<Settings> const& settings,
-	IntrusivePtr<ProjectPages> const& page_sequence,
+	std::shared_ptr<ProjectPages> const& page_sequence,
 	PageSelectionAccessor const& page_selection_accessor)
 :	m_ptrSettings(settings),
 	m_ptrPages(page_sequence),

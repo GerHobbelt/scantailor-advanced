@@ -51,7 +51,7 @@ public:
 	Task(
 		IntrusivePtr<Filter> const& filter,
 		IntrusivePtr<Settings> const& settings,
-		IntrusivePtr<ProjectPages> const& pages,
+		std::shared_ptr<ProjectPages> const& pages,
 		IntrusivePtr<deskew::Task> const& next_task,
 		PageInfo const& page_info,
 		bool batch_processing, bool debug);
@@ -64,7 +64,7 @@ private:
 
 	IntrusivePtr<Filter> m_ptrFilter;
 	IntrusivePtr<Settings> m_ptrSettings;
-	IntrusivePtr<ProjectPages> m_ptrPages;
+	std::shared_ptr<ProjectPages> m_ptrPages;
 	IntrusivePtr<deskew::Task> m_ptrNextTask;
 	std::unique_ptr<DebugImages> m_ptrDbg;
 	PageInfo m_pageInfo;
