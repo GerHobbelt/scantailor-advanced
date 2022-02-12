@@ -24,10 +24,9 @@
 #endif
 
 #define DECLARE_NON_COPYABLE(Class) \
-private: \
 /** \brief Copying is forbidden. */ \
-Class(Class const&); \
+Class(Class const&)=delete; \
 /** \brief Copying is forbidden. */ \
-Class& operator=(Class const&);
+Class& operator=(Class const&)=delete;
 
 #endif
