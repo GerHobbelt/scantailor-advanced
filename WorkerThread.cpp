@@ -62,6 +62,7 @@ private:
 
 class WorkerThread::Impl : public QThread
 {
+	friend class WorkerThread;
 public:
 	enum { NormalExit = 0, ExitForRestart };
 
@@ -99,14 +100,17 @@ private:
 class WorkerThread::TaskResultEvent : public QEvent
 {
 public:
-	TaskResultEvent(BackgroundTaskPtr const& task, FilterResultPtr const& result);
+	TaskResultEvent(BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread &ptrThread);
 	
 	BackgroundTaskPtr const& task() const { return m_ptrTask; }
 	
 	FilterResultPtr const& result() const { return m_ptrResult; }
+	
+	WorkerThread& thread() const{return m_ptrThread; }
 private:
 	BackgroundTaskPtr m_ptrTask;
 	FilterResultPtr m_ptrResult;
+	WorkerThread& m_ptrThread;
 };
 
 
@@ -138,9 +142,9 @@ WorkerThread::performTask(BackgroundTaskPtr const& task)
 
 void
 WorkerThread::emitTaskResult(
-	BackgroundTaskPtr const& task, FilterResultPtr const& result)
+	BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread& thread)
 {
-	emit taskResult(task, result);
+	emit taskResult(task, result, thread);
 }
 
 
@@ -240,7 +244,7 @@ WorkerThread::Dispatcher::processTask(BackgroundTaskPtr const& task)
 		FilterResultPtr const result((*task)());
 		if (result) {
 			QCoreApplication::postEvent(
-				&m_rOwner, new TaskResultEvent(task, result)
+				&m_rOwner, new TaskResultEvent(task, result, m_rOwner.m_rOwner)
 			);
 		}
 	} catch (std::bad_alloc const&) {
@@ -294,7 +298,7 @@ WorkerThread::Impl::customEvent(QEvent* event)
 	}
 
 	if (TaskResultEvent* evt = dynamic_cast<TaskResultEvent*>(event)) {
-		m_rOwner.emitTaskResult(evt->task(), evt->result());
+		m_rOwner.emitTaskResult(evt->task(), evt->result(), evt->thread());
 	}
 }
 
@@ -312,10 +316,11 @@ WorkerThread::PerformTaskEvent::PerformTaskEvent(
 /*====================== WorkerThread::TaskResultEvent =====================*/
 
 WorkerThread::TaskResultEvent::TaskResultEvent(
-	BackgroundTaskPtr const& task, FilterResultPtr const& result)
+	BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread& ptrThread)
 :	QEvent(User),
 	m_ptrTask(task),
-	m_ptrResult(result)
+	m_ptrResult(result),
+	m_ptrThread(ptrThread)
 {
 }
 

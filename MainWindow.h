@@ -44,6 +44,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <mutex>
 
 class AbstractFilter;
 class AbstractRelinker;
@@ -131,7 +132,7 @@ private slots:
 	
 	void startBatchProcessing();
 	
-	void stopBatchProcessing(MainAreaAction main_area = UPDATE_MAIN_AREA);
+	void stopBatchProcessing(MainWindow::MainAreaAction main_area = UPDATE_MAIN_AREA);
 	
 	void invalidateThumbnail(PageId const& page_id);
 
@@ -143,7 +144,8 @@ private slots:
 	
 	void filterResult(
 		BackgroundTaskPtr const& task,
-		FilterResultPtr const& result);
+		FilterResultPtr const& result,
+		WorkerThread&);
 	
 	void debugToggled(bool enabled);
 	
@@ -279,7 +281,7 @@ private:
 	OutputFileNameGenerator m_outFileNameGen;
 	IntrusivePtr<ThumbnailPixmapCache> m_ptrThumbnailCache;
 	std::unique_ptr<ThumbnailSequence> m_ptrThumbSequence;
-	std::unique_ptr<WorkerThread> m_ptrWorkerThread;
+	std::vector<std::unique_ptr<WorkerThread>> m_ptrWorkerThread;
 	std::unique_ptr<ProcessingTaskQueue> m_ptrBatchQueue;
 	std::unique_ptr<ProcessingTaskQueue> m_ptrInteractiveQueue;
 	QStackedLayout* m_pImageFrameLayout;

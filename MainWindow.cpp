@@ -157,7 +157,7 @@ private:
 MainWindow::MainWindow()
 :	m_ptrPages(new ProjectPages),
 	m_ptrStages(new StageSequence(m_ptrPages, newPageSelectionAccessor())),
-	m_ptrWorkerThread(new WorkerThread),
+	m_ptrWorkerThread(QThread::idealThreadCount()),
 	m_ptrInteractiveQueue(new ProcessingTaskQueue(ProcessingTaskQueue::RANDOM_ORDER)),
 	m_ptrOutOfMemoryDialog(new OutOfMemoryDialog),
 	m_curFilter(0),
@@ -166,6 +166,11 @@ MainWindow::MainWindow()
 	m_debug(false),
 	m_closing(false)
 {
+	for(size_t i = 0; i < m_ptrWorkerThread.size(); i++)
+	{
+		m_ptrWorkerThread[i].reset(new WorkerThread);
+	}
+	
 	m_maxLogicalThumbSize = QSize(250, 160);
 	m_ptrThumbSequence.reset(new ThumbnailSequence(m_maxLogicalThumbSize));
 
@@ -224,11 +229,14 @@ MainWindow::MainWindow()
 		this, SLOT(startBatchProcessing())
 	);
 
-	connect(
-		m_ptrWorkerThread.get(),
-		SIGNAL(taskResult(BackgroundTaskPtr const&, FilterResultPtr const&)),
-		this, SLOT(filterResult(BackgroundTaskPtr const&, FilterResultPtr const&))
-	);
+	for(size_t i = 0; i < m_ptrWorkerThread.size(); i++)
+	{
+		connect(
+			m_ptrWorkerThread[i].get(),
+			SIGNAL(taskResult(BackgroundTaskPtr const&, FilterResultPtr const&, WorkerThread&)),
+			this, SLOT(filterResult(BackgroundTaskPtr const&, FilterResultPtr const&, WorkerThread&))
+		);
+	}
 
 	connect(
 		m_ptrThumbSequence.get(),
@@ -319,7 +327,10 @@ MainWindow::~MainWindow()
 	if (m_ptrBatchQueue.get()) {
 		m_ptrBatchQueue->cancelAndClear();
 	}
-	m_ptrWorkerThread->shutdown();
+	for(size_t i = 0; i < m_ptrWorkerThread.size(); i++)
+	{
+		m_ptrWorkerThread[i]->shutdown();
+	}
 
 	removeWidgetsFromLayout(m_pImageFrameLayout);
 	removeWidgetsFromLayout(m_pOptionsFrameLayout);
@@ -1171,10 +1182,12 @@ MainWindow::startBatchProcessing()
 		)
 	);
 	PageInfo page(m_ptrThumbSequence->selectionLeader());
+	bool hasPages = false;
 	for (; !page.isNull(); page = m_ptrThumbSequence->nextPage(page.id())) {
 		m_ptrBatchQueue->addProcessingTask(
 			page, createCompositeTask(page, m_curFilter, /*batch=*/true, m_debug)
 		);
+		hasPages = true;
 	}
 
 	focusButton->setChecked(true);
@@ -1183,21 +1196,27 @@ MainWindow::startBatchProcessing()
 	filterList->setBatchProcessingInProgress(true);
 	filterList->setEnabled(false);
 
-	BackgroundTaskPtr const task(m_ptrBatchQueue->takeForProcessing());
-	if (task) {
-		m_ptrWorkerThread->performTask(task);
-	} else {
+	if(!hasPages) 
+	{
 		stopBatchProcessing();
+		return;
 	}
-
-	page = m_ptrBatchQueue->selectedPage();
-	if (!page.isNull()) {
-		m_ptrThumbSequence->setSelection(page.id());
+	
+	for(size_t i = 0; i < m_ptrWorkerThread.size(); i++)
+	{
+		BackgroundTaskPtr const task(m_ptrBatchQueue->takeForProcessing());
+		if (task) {
+			m_ptrWorkerThread[i]->performTask(task);
+			page = m_ptrBatchQueue->selectedPage();
+			if (!page.isNull()) {
+				m_ptrThumbSequence->setSelection(page.id());
+			}
+		} else {
+			break;
+		}
 	}
-
 	// Display the batch processing screen.
-	updateMainArea();
-}
+	updateMainArea();}
 
 void
 MainWindow::stopBatchProcessing(MainAreaAction main_area)
@@ -1227,8 +1246,10 @@ MainWindow::stopBatchProcessing(MainAreaAction main_area)
 	}
 }
 
+// the method (slot) below is connected to the output signal of the worker thread.
+// it is called each time a page has been processed.
 void
-MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& result)
+MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread& thread)
 {
 	// Cancelled or not, we must mark it as finished.
 	m_ptrInteractiveQueue->processingFinished(task);
@@ -1267,7 +1288,8 @@ MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& r
 				QApplication::beep();
 			}
 
-			if (m_selectedPage.get(getCurrentView()) == m_ptrThumbSequence->lastPage().id()) {
+			//if (m_selectedPage.get(getCurrentView()) == m_ptrThumbSequence->lastPage().id()) 
+			{
 				// If batch processing finished at the last page, jump to the first one.
 				goFirstPage();
 			}
@@ -1275,9 +1297,11 @@ MainWindow::filterResult(BackgroundTaskPtr const& task, FilterResultPtr const& r
 			return;
 		}
 
+		assert(m_ptrBatchQueue);
 		BackgroundTaskPtr const task(m_ptrBatchQueue->takeForProcessing());
 		if (task) {
-			m_ptrWorkerThread->performTask(task);
+			// give the task to the thread that just finished.
+			thread.performTask(task);
 		}
 
 		PageInfo const page(m_ptrBatchQueue->selectedPage());
@@ -1696,7 +1720,7 @@ MainWindow::loadPageInteractive(PageInfo const& page)
 	m_ptrInteractiveQueue->addProcessingTask(
 		page, createCompositeTask(page, m_curFilter, /*batch=*/false, m_debug)
 	);
-	m_ptrWorkerThread->performTask(m_ptrInteractiveQueue->takeForProcessing());
+	m_ptrWorkerThread[0]->performTask(m_ptrInteractiveQueue->takeForProcessing());
 }
 
 void

@@ -44,9 +44,9 @@ public:
 public slots:
 	void performTask(BackgroundTaskPtr const& task);
 signals:
-	void taskResult(BackgroundTaskPtr const& task, FilterResultPtr const& result);
+	void taskResult(BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread& thread);
 private:
-	void emitTaskResult(BackgroundTaskPtr const& task, FilterResultPtr const& result);
+	void emitTaskResult(BackgroundTaskPtr const& task, FilterResultPtr const& result, WorkerThread& thread);
 	
 	class Impl;
 	class Dispatcher;
