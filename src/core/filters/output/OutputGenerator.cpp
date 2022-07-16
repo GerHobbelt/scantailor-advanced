@@ -527,7 +527,7 @@ void fillMarginsInPlace(QImage& image,
                         const QColor& color,
                         const bool antialiasing = true) {
   if (content_poly.intersected(QRectF(image.rect())) != content_poly) {
-    throw std::invalid_argument("fillMarginsInPlace: the content area exceeds image rect.");
+    qWarning() << "fillMarginsInPlace: the content area " << content_poly << " exceeds image rect." << image.rect();
   }
 
   if ((image.format() == QImage::Format_Mono) || (image.format() == QImage::Format_MonoLSB)) {
@@ -564,7 +564,7 @@ void fillMarginsInPlace(QImage& image,
 
 void fillMarginsInPlace(BinaryImage& image, const QPolygonF& content_poly, const BWColor color) {
   if (content_poly.intersected(QRectF(image.rect())) != content_poly) {
-    throw std::invalid_argument("fillMarginsInPlace: the content area exceeds image rect.");
+    qWarning() << "fillMarginsInPlace (BW): the content area " << content_poly << " exceeds image rect." << image.rect();
   }
 
   PolygonRasterizer::fillExcept(image, color, content_poly, Qt::WindingFill);
