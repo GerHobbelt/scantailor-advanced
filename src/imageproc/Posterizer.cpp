@@ -4,6 +4,8 @@
 #include "Posterizer.h"
 
 #include <cassert>
+#include <stdexcept>
+
 #include <set>
 #include <unordered_set>
 

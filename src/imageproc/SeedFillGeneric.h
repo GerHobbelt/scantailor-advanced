@@ -4,6 +4,7 @@
 #ifndef SCANTAILOR_IMAGEPROC_SEEDFILLGENERIC_H_
 #define SCANTAILOR_IMAGEPROC_SEEDFILLGENERIC_H_
 
+#include <stdexcept>
 #include <QSize>
 #include <cassert>
 #include <vector>

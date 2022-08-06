@@ -5,6 +5,7 @@
 #define SCANTAILOR_IMAGEPROC_UPSCALEINTEGERTIMES_H_
 
 #include "BWColor.h"
+#include <stdexcept>
 
 class QSize;
 

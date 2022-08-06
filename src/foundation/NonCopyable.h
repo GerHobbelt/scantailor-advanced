@@ -8,6 +8,8 @@
 #include <config.h>
 #endif
 
+#include <stdexcept>
+
 #define DECLARE_NON_COPYABLE(Class)            \
  public:                                       \
   /** \brief Copying is forbidden. */          \

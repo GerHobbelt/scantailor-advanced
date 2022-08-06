@@ -7,6 +7,7 @@
 #include <QColor>
 #include <QSizeF>
 #include <cstdint>
+#include <stdexcept>
 
 class QImage;
 class QRect;
