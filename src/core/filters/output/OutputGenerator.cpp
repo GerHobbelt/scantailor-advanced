@@ -46,9 +46,10 @@
 #include <QPolygonF>
 #include <QSize>
 #include <QTransform>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/function.hpp>
 #include <cmath>
+#include <stdexcept>
 
 #include "ColorParams.h"
 #include "DebugImages.h"
@@ -645,7 +646,8 @@ void applyFillZonesInPlace(QImage& img,
 using MapPointFunc = QPointF (QTransform::*)(const QPointF&) const;
 
 void applyFillZonesInPlace(QImage& img, const ZoneSet& zones, const QTransform& transform, bool antialiasing = true) {
-  applyFillZonesInPlace(img, zones, boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, _1),
+  applyFillZonesInPlace(img, zones,
+                        boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, boost::placeholders::_1),
                         antialiasing);
 }
 
@@ -665,7 +667,8 @@ void applyFillZonesInPlace(BinaryImage& img,
 }
 
 void applyFillZonesInPlace(BinaryImage& img, const ZoneSet& zones, const QTransform& transform) {
-  applyFillZonesInPlace(img, zones, boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, _1));
+  applyFillZonesInPlace(img, zones,
+                        boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, boost::placeholders::_1));
 }
 
 void applyFillZonesToMixedInPlace(QImage& img,
@@ -692,8 +695,9 @@ void applyFillZonesToMixedInPlace(QImage& img,
                                   const QTransform& transform,
                                   const BinaryImage& pictureMask,
                                   bool binaryMode) {
-  applyFillZonesToMixedInPlace(img, zones, boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, _1),
-                               pictureMask, binaryMode);
+  applyFillZonesToMixedInPlace(
+      img, zones, boost::bind(static_cast<MapPointFunc>(&QTransform::map), transform, boost::placeholders::_1),
+      pictureMask, binaryMode);
 }
 
 void applyFillZonesToMask(BinaryImage& mask,
@@ -714,7 +718,8 @@ void applyFillZonesToMask(BinaryImage& mask,
                           const ZoneSet& zones,
                           const QTransform& transform,
                           const BWColor fillColor = BLACK) {
-  applyFillZonesToMask(mask, zones, boost::bind((MapPointFunc) &QTransform::map, transform, _1), fillColor);
+  applyFillZonesToMask(mask, zones, boost::bind((MapPointFunc) &QTransform::map, transform, boost::placeholders::_1),
+                       fillColor);
 }
 
 const int MultiplyDeBruijnBitPosition[32] = {0,  1,  28, 2,  29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4,  8,
@@ -1427,10 +1432,19 @@ std::unique_ptr<OutputImage> OutputGenerator::Processor::processWithoutDewarping
   }
 
   if (m_renderParams.needBinarization() && !m_renderParams.originalBackground()) {
-    m_outsideBackgroundColor = Qt::white;
+    switch (m_colorParams.colorCommonOptions().getFillingColor()) {
+      case FILL_BLACK:
+        m_outsideBackgroundColor = Qt::black;
+        break;
+      default:
+        m_outsideBackgroundColor = Qt::white;
+    }
   } else if (m_colorParams.colorCommonOptions().getFillingColor() == FILL_WHITE) {
     m_outsideBackgroundColor = m_blackOnWhite ? Qt::white : Qt::black;
+  } else if (m_colorParams.colorCommonOptions().getFillingColor() == FILL_BLACK) {
+    m_outsideBackgroundColor = m_blackOnWhite ? Qt::black : Qt::white;
   }
+
   fillMarginsInPlace(maybeNormalized, m_contentAreaInWorkingCs, m_outsideBackgroundColor);
   dst.fill(m_outsideBackgroundColor);
 
@@ -1583,7 +1597,7 @@ std::unique_ptr<OutputImage> OutputGenerator::Processor::processWithDewarping(Zo
   auto mapper = std::make_shared<DewarpingPointMapper>(distortionModel, depthPerception.value(), m_xform.transform(),
                                                        m_croppedContentRect, rotateXform);
   const boost::function<QPointF(const QPointF&)> origToOutput(
-      boost::bind(&DewarpingPointMapper::mapToDewarpedSpace, mapper, _1));
+      boost::bind(&DewarpingPointMapper::mapToDewarpedSpace, mapper, boost::placeholders::_1));
 
   BinaryImage dewarpingContentAreaMask(m_inputGrayImage.size(), BLACK);
   {
@@ -2205,19 +2219,45 @@ BinaryImage OutputGenerator::Processor::binarize(const QImage& image) const {
       break;
     }
     case SAUVOLA: {
+      double thresholdDelta = blackWhiteOptions.thresholdAdjustment();
       QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
-      double sauvolaCoef = blackWhiteOptions.getSauvolaCoef();
+      double thresholdCoef = blackWhiteOptions.getSauvolaCoef();
 
-      binarized = binarizeSauvola(image, windowsSize, sauvolaCoef);
+      binarized = binarizeSauvola(image, windowsSize, thresholdCoef, thresholdDelta);
       break;
     }
     case WOLF: {
+      double thresholdDelta = blackWhiteOptions.thresholdAdjustment();
       QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
       auto lowerBound = (unsigned char) blackWhiteOptions.getWolfLowerBound();
       auto upperBound = (unsigned char) blackWhiteOptions.getWolfUpperBound();
-      double wolfCoef = blackWhiteOptions.getWolfCoef();
+      double thresholdCoef = blackWhiteOptions.getWolfCoef();
 
-      binarized = binarizeWolf(image, windowsSize, lowerBound, upperBound, wolfCoef);
+      binarized = binarizeWolf(image, windowsSize, lowerBound, upperBound, thresholdCoef, thresholdDelta);
+      break;
+    }
+    case EDGEPLUS: {
+      double thresholdDelta = blackWhiteOptions.thresholdAdjustment();
+      QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
+      double thresholdCoef = blackWhiteOptions.getSauvolaCoef();
+
+      binarized = binarizeEdgeDiv(image, windowsSize, thresholdCoef, 0.0, thresholdDelta);
+      break;
+    }
+    case BLURDIV: {
+      double thresholdDelta = blackWhiteOptions.thresholdAdjustment();
+      QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
+      double thresholdCoef = blackWhiteOptions.getSauvolaCoef();
+
+      binarized = binarizeEdgeDiv(image, windowsSize, 0.0, thresholdCoef, thresholdDelta);
+      break;
+    }
+    case EDGEDIV: {
+      double thresholdDelta = blackWhiteOptions.thresholdAdjustment();
+      QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
+      double thresholdCoef = blackWhiteOptions.getSauvolaCoef();
+
+      binarized = binarizeEdgeDiv(image, windowsSize, thresholdCoef, thresholdCoef, thresholdDelta);
       break;
     }
   }

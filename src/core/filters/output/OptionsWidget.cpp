@@ -42,14 +42,24 @@ OptionsWidget::OptionsWidget(std::shared_ptr<Settings> settings, const PageSelec
   thresholdMethodBox->addItem(tr("Otsu"), OTSU);
   thresholdMethodBox->addItem(tr("Sauvola"), SAUVOLA);
   thresholdMethodBox->addItem(tr("Wolf"), WOLF);
+  thresholdMethodBox->addItem(tr("EdgePlus"), EDGEPLUS);
+  thresholdMethodBox->addItem(tr("BlurDiv"), BLURDIV);
+  thresholdMethodBox->addItem(tr("EdgeDiv"), EDGEDIV);
 
   fillingColorBox->addItem(tr("Background"), FILL_BACKGROUND);
   fillingColorBox->addItem(tr("White"), FILL_WHITE);
+  fillingColorBox->addItem(tr("Black"), FILL_BLACK);
 
   QPointer<BinarizationOptionsWidget> otsuBinarizationOptionsWidget = new OtsuBinarizationOptionsWidget(m_settings);
   QPointer<BinarizationOptionsWidget> sauvolaBinarizationOptionsWidget
       = new SauvolaBinarizationOptionsWidget(m_settings);
   QPointer<BinarizationOptionsWidget> wolfBinarizationOptionsWidget = new WolfBinarizationOptionsWidget(m_settings);
+  QPointer<BinarizationOptionsWidget> edgeplusBinarizationOptionsWidget
+      = new SauvolaBinarizationOptionsWidget(m_settings);
+  QPointer<BinarizationOptionsWidget> blurdivBinarizationOptionsWidget
+      = new SauvolaBinarizationOptionsWidget(m_settings);
+  QPointer<BinarizationOptionsWidget> edgedivBinarizationOptionsWidget
+      = new SauvolaBinarizationOptionsWidget(m_settings);
 
   while (binarizationOptions->count() != 0) {
     binarizationOptions->removeWidget(binarizationOptions->widget(0));
@@ -57,6 +67,9 @@ OptionsWidget::OptionsWidget(std::shared_ptr<Settings> settings, const PageSelec
   addBinarizationOptionsWidget(otsuBinarizationOptionsWidget);
   addBinarizationOptionsWidget(sauvolaBinarizationOptionsWidget);
   addBinarizationOptionsWidget(wolfBinarizationOptionsWidget);
+  addBinarizationOptionsWidget(edgeplusBinarizationOptionsWidget);
+  addBinarizationOptionsWidget(blurdivBinarizationOptionsWidget);
+  addBinarizationOptionsWidget(edgedivBinarizationOptionsWidget);
   updateBinarizationOptionsDisplay(binarizationOptions->currentIndex());
 
   pictureShapeSelector->addItem(tr("Off"), OFF_SHAPE);
