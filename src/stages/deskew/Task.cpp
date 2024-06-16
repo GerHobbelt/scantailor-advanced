@@ -40,6 +40,7 @@
 #include "imageproc/AffineTransform.h"
 #include "imageproc/BinaryImage.h"
 #include "imageproc/BinaryThreshold.h"
+#include "imageproc/Binarize.h"
 #include "imageproc/BWColor.h"
 #include "imageproc/GrayImage.h"
 #include "imageproc/OrthogonalRotation.h"
@@ -190,7 +191,7 @@ Task::Task(IntrusivePtr<Filter> const& filter,
            IntrusivePtr<Settings> const& settings,
            IntrusivePtr<select_content::Task> const& next_task,
            PageId const& page_id, bool const batch_processing, bool const debug)
-    :	m_ptrFilter(filter),
+    :   m_ptrFilter(filter),
       m_ptrSettings(settings),
       m_ptrNextTask(next_task),
       m_pageId(page_id),
@@ -314,13 +315,27 @@ Task::processRotationDistortion(
 
         if (transformed_crop_rect.isValid())
         {
-            BinaryImage bw_image(
+            /*
+            QImage trim_image(
                 accel_ops->affineTransform(
                     gray_orig_image_factory(), orig_image_transform.transform(),
                     transformed_crop_rect, OutsidePixels::assumeColor(Qt::white)
-                ),
+                )
+            );
+            BinaryImage bw_image(
+                trim_image,
                 BinaryThreshold::otsuThreshold(gray_orig_image_factory())
             );
+            trim_image = QImage();
+            */
+            GrayImage trim_image(
+                accel_ops->affineTransform(
+                    gray_orig_image_factory(), orig_image_transform.transform(),
+                    transformed_crop_rect, OutsidePixels::assumeColor(Qt::white)
+                )
+            );
+            BinaryImage bw_image(binarizeEdgeDiv(trim_image, QSize(15, 15), 0.5, 1.0, 0.0));
+            trim_image = GrayImage();
             if (m_ptrDbg.get())
             {
                 m_ptrDbg->add(bw_image, "bw_image");
@@ -468,7 +483,8 @@ Task::processPerspectiveDistortion(
                 orig_image_transform.origSize(),
                 orig_image_transform.origCropArea(),
                 top_curve, bottom_curve,
-                dewarping::DepthPerception() // Doesn't matter when curves are flat.
+                dewarping::DepthPerception(),
+                0.0
             )
         );
         return m_ptrNextTask->process(
@@ -557,6 +573,7 @@ Task::processWarpDistortion(
                 orig_image_transform.origSize(), orig_image_transform.origCropArea(),
                 params.dewarpingParams().distortionModel().topCurve().polyline(),
                 params.dewarpingParams().distortionModel().bottomCurve().polyline(),
+                params.dewarpingParams().depthPerception(),
                 params.dewarpingParams().depthPerception()
             )
         );
@@ -625,7 +642,7 @@ Task::NoDistortionUiUpdater::NoDistortionUiUpdater(
     PageId const& page_id,
     Params const& page_params,
     bool const batch_processing)
-    :	m_ptrFilter(filter),
+    :   m_ptrFilter(filter),
       m_ptrAccelOps(accel_ops),
       m_ptrDbg(std::move(dbg_img)),
       m_fullSizeImage(full_size_image),
@@ -669,7 +686,7 @@ Task::RotationUiUpdater::RotationUiUpdater(
     PageId const& page_id,
     Params const& page_params,
     bool const batch_processing)
-    :	m_ptrFilter(filter),
+    :   m_ptrFilter(filter),
       m_ptrAccelOps(accel_ops),
       m_ptrDbg(std::move(dbg_img)),
       m_fullSizeImage(full_size_image),
@@ -722,7 +739,7 @@ Task::PerspectiveUiUpdater::PerspectiveUiUpdater(
     PageId const& page_id,
     Params const& page_params,
     bool const batch_processing)
-    :	m_ptrFilter(filter),
+    :   m_ptrFilter(filter),
       m_ptrAccelOps(accel_ops),
       m_ptrDbg(std::move(dbg_img)),
       m_fullSizeImage(full_size_image),
@@ -799,7 +816,7 @@ Task::DewarpingUiUpdater::DewarpingUiUpdater(
     PageId const& page_id,
     Params const& page_params,
     bool const batch_processing)
-    :	m_ptrFilter(filter),
+    :   m_ptrFilter(filter),
       m_ptrAccelOps(accel_ops),
       m_ptrDbg(std::move(dbg_img)),
       m_fullSizeImage(full_size_image),
