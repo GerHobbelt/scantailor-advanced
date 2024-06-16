@@ -361,19 +361,27 @@ OutputGenerator::process(
     double norm_coef = color_options.normalizeCoef();
 
     // Color filters begin
-    wienerColorFilterInPlace(transformed_image, QSize(color_options.wienerWindowSize(), color_options.wienerWindowSize()), color_options.wienerCoef());
+    autoLevelFilterInPlace(transformed_image, color_options.autoLevelSize(), color_options.autoLevelCoef());
+
+    wienerColorFilterInPlace(transformed_image, color_options.wienerSize(), color_options.wienerCoef());
 
     knnDenoiserFilterInPlace(transformed_image, color_options.knndRadius(), color_options.knndCoef());
 
     colorDespeckleFilterInPlace(transformed_image, color_options.cdespeckleRadius(), color_options.cdespeckleCoef());
 
-    blurFilterInPlace(transformed_image, QSize(color_options.blurWindowSize(), color_options.blurWindowSize()), color_options.blurCoef());
+    blurFilterInPlace(transformed_image, color_options.blurSize(), color_options.blurCoef());
 
-    screenFilterInPlace(transformed_image, QSize(color_options.screenWindowSize(), color_options.screenWindowSize()), color_options.screenCoef());
+    screenFilterInPlace(transformed_image, color_options.screenSize(), color_options.screenCoef());
 
     colorCurveFilterInPlace(transformed_image, color_options.curveCoef());
 
     colorSqrFilterInPlace(transformed_image, color_options.sqrCoef());
+
+    edgedivFilterInPlace(transformed_image, color_options.edgedivSize(), color_options.edgedivCoef());
+
+    gravureFilterInPlace(transformed_image, color_options.gravureSize(), color_options.gravureCoef());
+
+    dots8FilterInPlace(transformed_image, color_options.dots8Size(), color_options.dots8Coef());
 
     GrayImage coloredSignificance(transformed_image);
     if (render_params.needBinarization())
@@ -433,7 +441,7 @@ OutputGenerator::process(
         GrayImage gray(transformed_image);
         transformed_image = gray.toQImage();
     }
-    
+
     QImage maybe_smoothed;
     // We only do smoothing if we are going to do binarization later.
     if (render_params.needBinarization())
@@ -520,7 +528,7 @@ OutputGenerator::process(
                 }
                 else
                 {
-                    bw_mask = estimateBinarizationMask(status, GrayImage(transformed_image), dbg);
+                    bw_mask = estimateBinarizationMask(status, GrayImage(transformed_image), dbg, black_white_options.autoPictureCoef());
                 }
 
                 if (dbg)
@@ -808,10 +816,47 @@ OutputGenerator::normalizeIlluminationGray(
 imageproc::BinaryImage
 OutputGenerator::estimateBinarizationMask(
     TaskStatus const& status, GrayImage const& gray_source,
-    DebugImages* const dbg) const
+    DebugImages* const dbg, float const coef) const
 {
     QSize const downscaled_size(gray_source.size().scaled(1600, 1600, Qt::KeepAspectRatio));
     GrayImage downscaled(scaleToGray(gray_source, downscaled_size));
+
+    if (!downscaled.isNull())
+    {
+        if ((coef < 0.0f) || (coef > 0.0f))
+        {
+            int icoef = (int) (coef * 256.0f + 0.5f);
+            unsigned int const w = downscaled.width();
+            unsigned int const h = downscaled.height();
+            uint8_t* downscaled_line = downscaled.data();
+            int const downscaled_stride = downscaled.stride();
+            uint8_t pix_replace[256];
+
+            for (unsigned int j = 0; j < 256; j++)
+            {
+                unsigned int val = j;
+                val++;
+                val *= val;
+                val += 255;
+                val >>= 8;
+                val--;
+                val = icoef * val + (256 - icoef) * j;
+                val += 128;
+                val >>= 8;
+                pix_replace[j] = (uint8_t) val;
+            }
+
+            for (unsigned int y = 0; y < h; y++)
+            {
+                for (unsigned int x = 0; x < w; x++)
+                {
+                    uint8_t val = downscaled_line[x];
+                    downscaled_line[x] = pix_replace[val];
+                }
+                downscaled_line += downscaled_stride;
+            }
+        }
+    }
 
     status.throwIfCancelled();
 
@@ -1190,6 +1235,16 @@ OutputGenerator::binarize(QImage const& image, BinaryImage const& mask) const
             binarized = binarizeBradley(gray, window_size, threshold_coef, threshold_delta);
             break;
         }
+        case SINGH:
+        {
+            binarized = binarizeSingh(gray, window_size, threshold_coef, threshold_delta);
+            break;
+        }
+        case WAN:
+        {
+            binarized = binarizeWAN(gray, window_size, threshold_coef, threshold_delta);
+            break;
+        }
         case EDGEPLUS:
         {
             binarized = binarizeEdgeDiv(gray, window_size, threshold_coef, 0.0, threshold_delta);
@@ -1203,6 +1258,11 @@ OutputGenerator::binarize(QImage const& image, BinaryImage const& mask) const
         case EDGEDIV:
         {
             binarized = binarizeEdgeDiv(gray, window_size, threshold_coef, threshold_coef, threshold_delta);
+            break;
+        }
+        case ROBUST:
+        {
+            binarized = binarizeRobust(gray, window_size, threshold_coef, threshold_delta);
             break;
         }
         case MSCALE:

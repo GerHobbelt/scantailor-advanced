@@ -152,6 +152,33 @@ IMAGEPROC_EXPORT BinaryImage binarizeBradley(
     double k = 0.2, int delta = 0);
 
 /**
+ * \brief Image binarization using Singh's adaptive thresholding method.
+ *
+ * Singh, O. I., Sinam, T., James, O., & Singh, T. R. (2012).
+ * Local contrast and mean based thresholding technique in image binarization.
+ * International Journal of Computer Applications, 51, 5-10.
+ * https://research.ijcaonline.org/volume51/number6/pxc3881362.pdf
+ */
+IMAGEPROC_EXPORT GrayImage binarizeSinghMap(
+    GrayImage const& src, QSize window_size, double k = 0.2);
+IMAGEPROC_EXPORT BinaryImage binarizeSingh(
+    GrayImage const& src, QSize window_size,
+    double k = 0.2, int delta = 0);
+
+/**
+ * \brief Image binarization using WAN's local thresholding method.
+ *
+ * Wan Azani Mustafa and Mohamed Mydin M. Abdul Kader
+ * "Binarization of Document Image Using Optimum Threshold Modification", 2018.
+ * https://www.researchgate.net/publication/326026836_Binarization_of_Document_Image_Using_Optimum_Threshold_Modification
+ */
+IMAGEPROC_EXPORT GrayImage binarizeWANMap(
+    GrayImage const& src, QSize window_size, double k = 0.2);
+IMAGEPROC_EXPORT BinaryImage binarizeWAN(
+    GrayImage const& src, QSize window_size,
+    double k = 0.2, int delta = 0);
+
+/**
  * \brief Image binarization using EdgeDiv (EdgePlus & BlurDiv) local/global thresholding method.
  *
  * EdgeDiv, zvezdochiot 2023. "Adaptive/global document image binarization".
@@ -162,6 +189,19 @@ IMAGEPROC_EXPORT GrayImage binarizeEdgeDivPrefilter(
 IMAGEPROC_EXPORT BinaryImage binarizeEdgeDiv(
     GrayImage const& src, QSize window_size,
     double kep = 0.5, double kdb = 0.5, int delta = 0);
+
+/**
+ * \brief Image binarization using Robust's local thresholding method.
+ *
+ * Tom Liao
+ * "Robust document binarization with OFF center-surround cells", 2017-08-09.
+ * https://www.researchgate.net/publication/226333284_Robust_document_binarization_with_OFF_center-surround_cells
+ */
+IMAGEPROC_EXPORT GrayImage binarizeRobustPrefilter(
+    GrayImage const& src, QSize window_size, double k = 0.2);
+IMAGEPROC_EXPORT BinaryImage binarizeRobust(
+    GrayImage const& src, QSize window_size,
+    double k = 0.2, int delta = 0);
 
 /**
  * \brief Image binarization using MultiScale thresholding method.

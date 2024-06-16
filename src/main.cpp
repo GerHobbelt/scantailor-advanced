@@ -32,6 +32,9 @@
 #include <QStringList>
 #include <QTranslator>
 #include <Qt>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QImageReader>
+#endif
 #include <string.h>
 
 #include "CommandLine.h"
@@ -247,6 +250,10 @@ int main(int argc, char** argv)
     {
         main_wnd->openProject(cli.projectFile());
     }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QImageReader::setAllocationLimit(0);
+#endif
 
     return app.exec();
 }

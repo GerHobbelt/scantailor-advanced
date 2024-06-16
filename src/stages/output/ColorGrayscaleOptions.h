@@ -30,20 +30,28 @@ class ColorGrayscaleOptions
 {
 public:
     ColorGrayscaleOptions()
-        : m_wienerCoef(0.0),
-          m_wienerWindowSize(5),
-          m_knndCoef(0.0),
-          m_knndRadius(5),
-          m_cdespeckleCoef(0.0),
-          m_cdespeckleRadius(5),
-          m_blurCoef(0.0),
-          m_blurWindowSize(5),
-          m_screenCoef(0.0),
-          m_screenWindowSize(10),
-          m_curveCoef(0.5),
+        : m_curveCoef(0.5),
           m_sqrCoef(0.0),
+          m_wienerSize(3),
+          m_wienerCoef(0.0),
+          m_autoLevelSize(10),
+          m_autoLevelCoef(0.0),
+          m_knndRadius(7),
+          m_knndCoef(0.0),
+          m_cdespeckleRadius(2),
+          m_cdespeckleCoef(0.0),
+          m_blurSize(1),
+          m_blurCoef(0.0),
+          m_screenSize(5),
+          m_screenCoef(0.0),
+          m_edgedivSize(13),
+          m_edgedivCoef(0.0),
+          m_gravureSize(15),
+          m_gravureCoef(0.0),
+          m_dots8Size(17),
+          m_dots8Coef(0.0),
+          m_unPaperIters(4),
           m_unPaperCoef(0.0),
-          m_unPaperIters(5),
           m_normalizeCoef(0.5),
           m_whiteMargins(false),
           m_grayScale(false) {}
@@ -52,92 +60,7 @@ public:
 
     QDomElement toXml(QDomDocument& doc, QString const& name) const;
 
-    double wienerCoef() const
-    {
-        return m_wienerCoef;
-    }
-    void setWienerCoef(double val)
-    {
-        m_wienerCoef = val;
-    }
-    int wienerWindowSize() const
-    {
-        return m_wienerWindowSize;
-    }
-    void setWienerWindowSize(int val)
-    {
-        m_wienerWindowSize = val;
-    }
-
-    double knndCoef() const
-    {
-        return m_knndCoef;
-    }
-    void setKnndCoef(double val)
-    {
-        m_knndCoef = val;
-    }
-    int knndRadius() const
-    {
-        return m_knndRadius;
-    }
-    void setKnndRadius(int val)
-    {
-        m_knndRadius = val;
-    }
-
-    double cdespeckleCoef() const
-    {
-        return m_cdespeckleCoef;
-    }
-    void setCdespeckleCoef(double val)
-    {
-        m_cdespeckleCoef = val;
-    }
-    int cdespeckleRadius() const
-    {
-        return m_cdespeckleRadius;
-    }
-    void setCdespeckleRadius(int val)
-    {
-        m_cdespeckleRadius = val;
-    }
-
-    double blurCoef() const
-    {
-        return m_blurCoef;
-    }
-    void setBlurCoef(double val)
-    {
-        m_blurCoef = val;
-    }
-    int blurWindowSize() const
-    {
-        return m_blurWindowSize;
-    }
-    void setBlurWindowSize(int val)
-    {
-        m_blurWindowSize = val;
-    }
-
-    double screenCoef() const
-    {
-        return m_screenCoef;
-    }
-    void setScreenCoef(double val)
-    {
-        m_screenCoef = val;
-    }
-    int screenWindowSize() const
-    {
-        return m_screenWindowSize;
-    }
-    void setScreenWindowSize(int val)
-    {
-        m_screenWindowSize = val;
-    }
-
-    double curveCoef() const
+     double curveCoef() const
     {
         return m_curveCoef;
     }
@@ -155,14 +78,159 @@ public:
         m_sqrCoef = val;
     }
 
-    double unPaperCoef() const
+    int wienerSize() const
     {
-        return m_unPaperCoef;
+        return m_wienerSize;
     }
-    void setUnPaperCoef(double val)
+    void setWienerSize(int val)
     {
-        m_unPaperCoef = val;
+        m_wienerSize = val;
     }
+   double wienerCoef() const
+    {
+        return m_wienerCoef;
+    }
+    void setWienerCoef(double val)
+    {
+        m_wienerCoef = val;
+    }
+
+    int autoLevelSize() const
+    {
+        return m_autoLevelSize;
+    }
+    void setAutoLevelSize(int val)
+    {
+        m_autoLevelSize = val;
+    }
+    double autoLevelCoef() const
+    {
+        return m_autoLevelCoef;
+    }
+    void setAutoLevelCoef(double val)
+    {
+        m_autoLevelCoef = val;
+    }
+
+    int knndRadius() const
+    {
+        return m_knndRadius;
+    }
+    void setKnndRadius(int val)
+    {
+        m_knndRadius = val;
+    }
+    double knndCoef() const
+    {
+        return m_knndCoef;
+    }
+    void setKnndCoef(double val)
+    {
+        m_knndCoef = val;
+    }
+
+    int cdespeckleRadius() const
+    {
+        return m_cdespeckleRadius;
+    }
+    void setCdespeckleRadius(int val)
+    {
+        m_cdespeckleRadius = val;
+    }
+    double cdespeckleCoef() const
+    {
+        return m_cdespeckleCoef;
+    }
+    void setCdespeckleCoef(double val)
+    {
+        m_cdespeckleCoef = val;
+    }
+
+    int blurSize() const
+    {
+        return m_blurSize;
+    }
+    void setBlurSize(int val)
+    {
+        m_blurSize = val;
+    }
+    double blurCoef() const
+    {
+        return m_blurCoef;
+    }
+    void setBlurCoef(double val)
+    {
+        m_blurCoef = val;
+    }
+
+    int screenSize() const
+    {
+        return m_screenSize;
+    }
+    void setScreenSize(int val)
+    {
+        m_screenSize = val;
+    }
+    double screenCoef() const
+    {
+        return m_screenCoef;
+    }
+    void setScreenCoef(double val)
+    {
+        m_screenCoef = val;
+    }
+
+    int edgedivSize() const
+    {
+        return m_edgedivSize;
+    }
+    void setEdgedivSize(int val)
+    {
+        m_edgedivSize = val;
+    }
+    double edgedivCoef() const
+    {
+        return m_edgedivCoef;
+    }
+    void setEdgedivCoef(double val)
+    {
+        m_edgedivCoef = val;
+    }
+
+    int gravureSize() const
+    {
+        return m_gravureSize;
+    }
+    void setGravureSize(int val)
+    {
+        m_gravureSize = val;
+    }
+    double gravureCoef() const
+    {
+        return m_gravureCoef;
+    }
+    void setGravureCoef(double val)
+    {
+        m_gravureCoef = val;
+    }
+
+    int dots8Size() const
+    {
+        return m_dots8Size;
+    }
+    void setDots8Size(int val)
+    {
+        m_dots8Size = val;
+    }
+    double dots8Coef() const
+    {
+        return m_dots8Coef;
+    }
+    void setDots8Coef(double val)
+    {
+        m_dots8Coef = val;
+    }
+
     int unPaperIters() const
     {
         return m_unPaperIters;
@@ -170,6 +238,14 @@ public:
     void setUnPaperIters(int val)
     {
         m_unPaperIters = val;
+    }
+    double unPaperCoef() const
+    {
+        return m_unPaperCoef;
+    }
+    void setUnPaperCoef(double val)
+    {
+        m_unPaperCoef = val;
     }
 
     double normalizeCoef() const
@@ -202,21 +278,30 @@ public:
     bool operator==(ColorGrayscaleOptions const& other) const;
 
     bool operator!=(ColorGrayscaleOptions const& other) const;
+
 private:
-    double m_wienerCoef;
-    int m_wienerWindowSize;
-    double m_knndCoef;
-    int m_knndRadius;
-    double m_cdespeckleCoef;
-    int m_cdespeckleRadius;
-    double m_blurCoef;
-    int m_blurWindowSize;
-    double m_screenCoef;
-    int m_screenWindowSize;
     double m_curveCoef;
     double m_sqrCoef;
-    double m_unPaperCoef;
+    int m_wienerSize;
+    double m_wienerCoef;
+    int m_autoLevelSize;
+    double m_autoLevelCoef;
+    int m_knndRadius;
+    double m_knndCoef;
+    int m_cdespeckleRadius;
+    double m_cdespeckleCoef;
+    int m_blurSize;
+    double m_blurCoef;
+    int m_screenSize;
+    double m_screenCoef;
+    int m_edgedivSize;
+    double m_edgedivCoef;
+    int m_gravureSize;
+    double m_gravureCoef;
+    int m_dots8Size;
+    double m_dots8Coef;
     int m_unPaperIters;
+    double m_unPaperCoef;
     double m_normalizeCoef;
     bool m_whiteMargins;
     bool m_grayScale;

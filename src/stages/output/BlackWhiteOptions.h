@@ -26,7 +26,7 @@ class QDomElement;
 namespace output
 {
 
-enum ThresholdFilter { OTSU, MEANDELTA, DOTS8, NIBLACK, GATOS, SAUVOLA, WOLF, BRADLEY, EDGEPLUS, BLURDIV, EDGEDIV, MSCALE };
+enum ThresholdFilter { OTSU, MEANDELTA, DOTS8, NIBLACK, GATOS, SAUVOLA, WOLF, BRADLEY, SINGH, WAN, EDGEPLUS, BLURDIV, EDGEDIV, ROBUST, MSCALE };
 
 class BlackWhiteOptions
 {
@@ -100,6 +100,15 @@ public:
         m_thresholdCoef = val;
     }
 
+    double autoPictureCoef() const
+    {
+        return m_autoPictureCoef;
+    }
+    void setAutoPictureCoef(double val)
+    {
+        m_autoPictureCoef = val;
+    }
+
     bool autoPictureOff() const
     {
         return m_autoPictureOff;
@@ -120,6 +129,7 @@ private:
     int m_thresholdAdjustment;
     int m_thresholdWindowSize;
     double m_thresholdCoef;
+    double m_autoPictureCoef;
     bool m_autoPictureOff;
 
     static ThresholdFilter parseThresholdMethod(QString const& str);
