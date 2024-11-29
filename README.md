@@ -109,7 +109,7 @@ PRs are highly welcome ;-)
  
 * #### Picture shape \[reworked\]
   Picture shape feature adds option for mixed pages to choose from free shape and rectangular
-  shape images. This patch does not improve the original algoritm but creates from the
+  shape images. This patch does not improve the original algorithm but creates from the
   detected "blobs" rectangular shapes and the rectangles that intersects joins to one.
   
   *This feature has been reworked. See [rectangular picture shape](#rectangular-picture-shape) feature description.*
@@ -347,7 +347,7 @@ has't been moved due to dirty realization. Their functionality is fully covered 
 
 * #### Saving zoom and focus on switching output tabs
   The save is precise and considers the images transformations.  
-  Also added a feature of swithing the output tabs by using **`Ctrl+1..5`** keys combinations.  
+  Also added a feature of switching the output tabs by using **`Ctrl+1..5`** keys combinations.  
 
 * #### Measurement units system
   The settings are available in the main window menu.
