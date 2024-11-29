@@ -8,6 +8,7 @@ set(ui_files
     OptionsWidget.ui
     PictureZonePropDialog.ui
     SauvolaBinarizationOptionsWidget.ui
+    SauvolaModBinarizationOptionsWidget.ui
     WolfBinarizationOptionsWidget.ui)
 
 set(sources
@@ -54,7 +55,8 @@ set(sources
     DepthPerception.cpp DepthPerception.h
     SplittingOptions.cpp SplittingOptions.h
     OtsuBinarizationOptionsWidget.cpp OtsuBinarizationOptionsWidget.h
-    SauvolaBinarizationOptionsWidget.cpp SauvolaBinarizationOptionsWidget.h 
+    SauvolaBinarizationOptionsWidget.cpp SauvolaBinarizationOptionsWidget.h
+    SauvolaModBinarizationOptionsWidget.cpp SauvolaModBinarizationOptionsWidget.h
     WolfBinarizationOptionsWidget.cpp WolfBinarizationOptionsWidget.h 
     BinarizationOptionsWidget.h 
     PictureShapeOptions.cpp PictureShapeOptions.h 

@@ -2220,6 +2220,13 @@ BinaryImage OutputGenerator::Processor::binarize(const QImage& image) const {
       binarized = binarizeWolf(image, windowsSize, lowerBound, upperBound, wolfCoef);
       break;
     }
+    case SAUVOLAMOD: {
+      QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
+      double sauvolaCoef = blackWhiteOptions.getSauvolaCoef();
+
+      binarized = binarizeSauvolaMod(image, windowsSize, sauvolaCoef);
+      break;
+    }
   }
   return binarized;
 }
