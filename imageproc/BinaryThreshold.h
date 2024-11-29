@@ -21,6 +21,9 @@
 
 #include "BWColor.h"
 
+#include <chrono>
+#include <iostream>
+
 class QImage;
 
 namespace imageproc

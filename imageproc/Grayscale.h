@@ -23,6 +23,9 @@
 #include <QVector>
 #include <QColor>
 
+#include <chrono>
+#include <iostream>
+
 class QImage;
 class QSize;
 

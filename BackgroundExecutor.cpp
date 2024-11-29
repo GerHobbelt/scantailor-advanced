@@ -25,6 +25,8 @@
 #include <new>
 #include <assert.h>
 
+#include <iostream>
+
 class BackgroundExecutor::Dispatcher : public QObject
 {
 public:
@@ -75,6 +77,7 @@ BackgroundExecutor::shutdown()
 void
 BackgroundExecutor::enqueueTask(TaskPtr const& task)
 {
+	std::cout << "BackgroundExecutor::enqueueTask()" << std::endl;
 	if (m_ptrImpl.get()) {
 		m_ptrImpl->enqueueTask(task);
 	}

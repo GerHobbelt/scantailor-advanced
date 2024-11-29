@@ -54,6 +54,8 @@ BinaryImage binarizeMokji(
 
 BinaryImage binarizeSauvola(QImage const& src, QSize const window_size)
 {
+	auto start = std::chrono::system_clock::now();
+	
 	if (window_size.isEmpty()) {
 		throw std::invalid_argument("binarizeSauvola: invalid window_size");
 	}
@@ -130,6 +132,10 @@ BinaryImage binarizeSauvola(QImage const& src, QSize const window_size)
 		gray_line += gray_bpl;
 		bw_line += bw_wpl;
 	}
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "imageproc::binarizeSauvola(): " << elapsed.count() << "s" << std::endl;
 	
 	return bw_img;
 }
@@ -138,6 +144,8 @@ BinaryImage binarizeWolf(
 	QImage const& src, QSize const window_size,
 	unsigned char const lower_bound, unsigned char const upper_bound)
 {
+	auto start = std::chrono::system_clock::now();
+
 	if (window_size.isEmpty()) {
 		throw std::invalid_argument("binarizeWolf: invalid window_size");
 	}
@@ -199,7 +207,7 @@ BinaryImage binarizeWolf(
 			
 			double const variance = sqmean - mean * mean;
 			double const deviation = sqrt(fabs(variance));
-			max_deviation = std::max(max_deviation, deviation);
+			max_deviation = std::max(max_deviation, deviation);  
 			means[w * y + x] = mean;
 			deviations[w * y + x] = deviation;
 		}
@@ -233,6 +241,10 @@ BinaryImage binarizeWolf(
 			}
 		}
 	}
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "imageproc::binarizeWolf(): " << elapsed.count() << "s" << std::endl;
 	
 	return bw_img;
 }
