@@ -44,6 +44,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <QList>
 
 #include <chrono>
 #include <iostream>
@@ -173,6 +174,10 @@ private slots:
 	void showAboutDialog();
 
 	void handleOutOfMemorySituation();
+
+    //Basic Multithread Support
+    void setMultithreaded(bool v_isMultithreaded);
+
 private:
 	class PageSelectionProviderImpl;
 	enum SavePromptResult { SAVE, DONT_SAVE, CANCEL };
@@ -305,6 +310,12 @@ private:
 	bool m_debug;
 	bool m_closing;
 	bool m_beepOnBatchProcessingCompletion;
+
+    // Multithread Support
+    int m_threadCount;
+    bool m_isMultithreaded;
+    bool isMultithreaded();
+    QList<WorkerThread*> m_WorkerThreads;
 };
 
 #endif

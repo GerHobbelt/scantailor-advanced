@@ -41,18 +41,18 @@ class Settings : public RefCountable
 	DECLARE_NON_COPYABLE(Settings)
 public:
 	enum AggregateSizeChanged { AGGREGATE_SIZE_UNCHANGED, AGGREGATE_SIZE_CHANGED };
-	
-	static Margins defaultHardMarginsMM() { return Margins(10.0, 5.0, 10.0, 5.0); }
+
+	static Margins defaultHardMarginsMM() { return Margins(2.0, 2.0, 2.0, 2.0); }
 
 	Settings();
-	
+
 	virtual ~Settings();
 
 	/**
 	 * \brief Removes all stored data.
 	 */
 	void clear();
-	
+
 	void performRelinking(AbstractRelinker const& relinker);
 
 	/**
@@ -70,14 +70,14 @@ public:
 	 */
 	bool checkEverythingDefined(
 		PageSequence const& pages, PageId const* ignore = 0) const;
-	
+
 	/**
 	 * \brief Get all page parameters at once.
 	 *
 	 * May return a null unique_ptr if the specified page is unknown to us.
 	 */
 	std::unique_ptr<Params> getPageParams(PageId const& page_id) const;
-	
+
 	/**
 	 * \brief Set all page parameters at once.
 	 */
@@ -90,7 +90,7 @@ public:
 		PageId const& page_id, QSizeF const& content_size_mm,
 		QSizeF* agg_hard_size_before = 0,
 		QSizeF* agg_hard_size_after = 0);
-	
+
 	/**
 	 * \brief Returns the hard margins for the specified page.
 	 *
@@ -102,7 +102,7 @@ public:
 	 * margins are returned.
 	 */
 	Margins getHardMarginsMM(PageId const& page_id) const;
-	
+
 	/**
 	 * \brief Sets hard margins for the specified page.
 	 *
@@ -111,7 +111,7 @@ public:
 	 * size with other pages.
 	 */
 	void setHardMarginsMM(PageId const& page_id, Margins const& margins_mm);
-	
+
 	/**
 	 * \brief Returns the alignment for the specified page.
 	 *
@@ -121,7 +121,7 @@ public:
 	 * which is "center vertically and horizontally".
 	 */
 	Alignment getPageAlignment(PageId const& page_id) const;
-	
+
 	/**
 	 * \brief Sets alignment for the specified page.
 	 *
@@ -129,7 +129,7 @@ public:
 	 * page's size affects others and vice versa.
 	 */
 	AggregateSizeChanged setPageAlignment(PageId const& page_id, Alignment const& alignment);
-	
+
 	/**
 	 * \brief Sets content size in millimeters for the specified page.
 	 *
@@ -137,14 +137,14 @@ public:
 	 */
 	AggregateSizeChanged setContentSizeMM(
 		PageId const& page_id, QSizeF const& content_size_mm);
-	
+
 	void invalidateContentSize(PageId const& page_id);
-	
+
 	/**
 	 * \brief Returns the aggregate (max width + max height) hard page size.
 	 */
 	QSizeF getAggregateHardSizeMM() const;
-	
+
 	/**
 	 * \brief Same as getAggregateHardSizeMM(), but assumes a specified
 	 *        size and alignment for a specified page.
@@ -161,7 +161,7 @@ private:
 	class ModifyMargins;
 	class ModifyAlignment;
 	class ModifyContentSize;
-	
+
 	std::unique_ptr<Impl> m_ptrImpl;
 };
 

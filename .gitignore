@@ -7,3 +7,9 @@ build/
 *~
 
 .idea/
+
+# The finished program
+scantailor
+scantailor-cli
+scantailor-cli.exe
+scantailor.exe

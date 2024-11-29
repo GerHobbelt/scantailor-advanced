@@ -55,18 +55,18 @@ public:
 	Margins hardMarginsMM;
 	QSizeF contentSizeMM;
 	Alignment alignment;
-	
+
 	Item(PageId const& page_id, Margins const& hard_margins_mm,
 		QSizeF const& content_size_mm, Alignment const& alignment);
-	
+
 	double hardWidthMM() const;
-	
+
 	double hardHeightMM() const;
-	
+
 	double influenceHardWidthMM() const;
-	
+
 	double influenceHardHeightMM() const;
-	
+
 	bool alignedWithOthers() const { return !alignment.isNull(); }
 };
 
@@ -75,7 +75,7 @@ class Settings::ModifyMargins
 {
 public:
 	ModifyMargins(Margins const& margins_mm) : m_marginsMM(margins_mm) {}
-	
+
 	void operator()(Item& item) {
 		item.hardMarginsMM = m_marginsMM;
 	}
@@ -88,7 +88,7 @@ class Settings::ModifyAlignment
 {
 public:
 	ModifyAlignment(Alignment const& alignment) : m_alignment(alignment) {}
-	
+
 	void operator()(Item& item) {
 		item.alignment = m_alignment;
 	}
@@ -102,7 +102,7 @@ class Settings::ModifyContentSize
 public:
 	ModifyContentSize(QSizeF const& content_size_mm)
 	: m_contentSizeMM(content_size_mm) {}
-	
+
 	void operator()(Item& item) {
 		item.contentSizeMM = m_contentSizeMM;
 	}
@@ -115,44 +115,44 @@ class Settings::Impl
 {
 public:
 	Impl();
-	
+
 	~Impl();
-	
+
 	void clear();
 
 	void performRelinking(AbstractRelinker const& relinker);
-	
+
 	void removePagesMissingFrom(PageSequence const& pages);
-	
+
 	bool checkEverythingDefined(
 		PageSequence const& pages, PageId const* ignore) const;
-	
+
 	std::unique_ptr<Params> getPageParams(PageId const& page_id) const;
-	
+
 	void setPageParams(PageId const& page_id, Params const& params);
-	
+
 	Params updateContentSizeAndGetParams(
 		PageId const& page_id, QSizeF const& content_size_mm,
 		QSizeF* agg_hard_size_before, QSizeF* agg_hard_size_after);
-	
+
 	Margins getHardMarginsMM(PageId const& page_id) const;
-	
+
 	void setHardMarginsMM(PageId const& page_id, Margins const& margins_mm);
-	
+
 	Alignment getPageAlignment(PageId const& page_id) const;
-	
+
 	AggregateSizeChanged setPageAlignment(
 		PageId const& page_id, Alignment const& alignment);
-	
+
 	AggregateSizeChanged setContentSizeMM(
 		PageId const& page_id, QSizeF const& content_size_mm);
-	
+
 	void invalidateContentSize(PageId const& page_id);
-	
+
 	QSizeF getAggregateHardSizeMM() const;
-	
+
 	QSizeF getAggregateHardSizeMMLocked() const;
-	
+
 	QSizeF getAggregateHardSizeMM(
 		PageId const& page_id, QSizeF const& hard_size_mm,
 		Alignment const& alignment) const;
@@ -160,7 +160,7 @@ private:
 	class SequencedTag;
 	class DescWidthTag;
 	class DescHeightTag;
-	
+
 	typedef multi_index_container<
 		Item,
 		indexed_by<
@@ -194,11 +194,11 @@ private:
 			>
 		>
 	> Container;
-	
+
 	typedef Container::index<SequencedTag>::type UnorderedItems;
 	typedef Container::index<DescWidthTag>::type DescWidthOrder;
 	typedef Container::index<DescHeightTag>::type DescHeightOrder;
-	
+
 	mutable QMutex m_mutex;
 	Container m_items;
 	UnorderedItems& m_unorderedItems;
@@ -367,7 +367,7 @@ Settings::Impl::Impl()
 	m_descHeightOrder(m_items.get<DescHeightTag>()),
 	m_invalidSize(),
 	m_defaultHardMarginsMM(page_layout::Settings::defaultHardMarginsMM()),
-	m_defaultAlignment(Alignment::TOP, Alignment::HCENTER)
+	m_defaultAlignment()
 {
 }
 
@@ -427,7 +427,7 @@ Settings::Impl::checkEverythingDefined(
 	PageSequence const& pages, PageId const* ignore) const
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	size_t const num_pages = pages.numPages();
 	for (size_t i = 0; i < num_pages; ++i) {
 		PageInfo const& page_info = pages.pageAt(i);
@@ -439,7 +439,7 @@ Settings::Impl::checkEverythingDefined(
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -447,12 +447,12 @@ std::unique_ptr<Params>
 Settings::Impl::getPageParams(PageId const& page_id) const
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Container::iterator const it(m_items.find(page_id));
 	if (it == m_items.end()) {
 		return std::unique_ptr<Params>();
 	}
-	
+
 	return std::unique_ptr<Params>(
 		new Params(it->hardMarginsMM, it->contentSizeMM, it->alignment)
 	);
@@ -462,12 +462,12 @@ void
 Settings::Impl::setPageParams(PageId const& page_id, Params const& params)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Item const new_item(
 		page_id, params.hardMarginsMM(),
 		params.contentSizeMM(), params.alignment()
 	);
-	
+
 	Container::iterator const it(m_items.lower_bound(page_id));
 	if (it == m_items.end() || page_id < it->pageId) {
 		m_items.insert(it, new_item);
@@ -482,11 +482,11 @@ Settings::Impl::updateContentSizeAndGetParams(
 	QSizeF* agg_hard_size_before, QSizeF* agg_hard_size_after)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	if (agg_hard_size_before) {
 		*agg_hard_size_before = getAggregateHardSizeMMLocked();
 	}
-	
+
 	Container::iterator const it(m_items.lower_bound(page_id));
 	Container::iterator item_it(it);
 	if (it == m_items.end() || page_id < it->pageId) {
@@ -498,11 +498,11 @@ Settings::Impl::updateContentSizeAndGetParams(
 	} else {
 		m_items.modify(it, ModifyContentSize(content_size_mm));
 	}
-	
+
 	if (agg_hard_size_after) {
 		*agg_hard_size_after = getAggregateHardSizeMMLocked();
 	}
-	
+
 	return Params(
 		item_it->hardMarginsMM,
 		item_it->contentSizeMM, item_it->alignment
@@ -513,7 +513,7 @@ Margins
 Settings::Impl::getHardMarginsMM(PageId const& page_id) const
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Container::iterator const it(m_items.find(page_id));
 	if (it == m_items.end()) {
 		return m_defaultHardMarginsMM;
@@ -527,7 +527,7 @@ Settings::Impl::setHardMarginsMM(
 	PageId const& page_id, Margins const& margins_mm)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Container::iterator const it(m_items.lower_bound(page_id));
 	if (it == m_items.end() || page_id < it->pageId) {
 		Item const item(
@@ -543,7 +543,7 @@ Alignment
 Settings::Impl::getPageAlignment(PageId const& page_id) const
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Container::iterator const it(m_items.find(page_id));
 	if (it == m_items.end()) {
 		return m_defaultAlignment;
@@ -557,7 +557,7 @@ Settings::Impl::setPageAlignment(
 	PageId const& page_id, Alignment const& alignment)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	QSizeF const agg_size_before(getAggregateHardSizeMMLocked());
 
 	Container::iterator const it(m_items.lower_bound(page_id));
@@ -583,9 +583,9 @@ Settings::Impl::setContentSizeMM(
 	PageId const& page_id, QSizeF const& content_size_mm)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	QSizeF const agg_size_before(getAggregateHardSizeMMLocked());
-	
+
 	Container::iterator const it(m_items.lower_bound(page_id));
 	if (it == m_items.end() || page_id < it->pageId) {
 		Item const item(
@@ -596,7 +596,7 @@ Settings::Impl::setContentSizeMM(
 	} else {
 		m_items.modify(it, ModifyContentSize(content_size_mm));
 	}
-	
+
 	QSizeF const agg_size_after(getAggregateHardSizeMMLocked());
 	if (agg_size_before == agg_size_after) {
 		return AGGREGATE_SIZE_UNCHANGED;
@@ -609,7 +609,7 @@ void
 Settings::Impl::invalidateContentSize(PageId const& page_id)
 {
 	QMutexLocker const locker(&m_mutex);
-	
+
 	Container::iterator const it(m_items.find(page_id));
 	if (it != m_items.end()) {
 		m_items.modify(it, ModifyContentSize(m_invalidSize));
@@ -629,13 +629,13 @@ Settings::Impl::getAggregateHardSizeMMLocked() const
 	if (m_items.empty()) {
 		return QSizeF(0.0, 0.0);
 	}
-	
+
 	Item const& max_width_item = *m_descWidthOrder.begin();
 	Item const& max_height_item = *m_descHeightOrder.begin();
-	
+
 	double const width = max_width_item.influenceHardWidthMM();
 	double const height = max_height_item.influenceHardHeightMM();
-	
+
 	return QSizeF(width, height);
 }
 
@@ -647,15 +647,15 @@ Settings::Impl::getAggregateHardSizeMM(
 	if (alignment.isNull()) {
 		return getAggregateHardSizeMM();
 	}
-	
+
 	QMutexLocker const locker(&m_mutex);
-	
+
 	if (m_items.empty()) {
 		return QSizeF(0.0, 0.0);
 	}
-	
+
 	double width = 0.0;
-	
+
 	{
 		DescWidthOrder::iterator it(m_descWidthOrder.begin());
 		if (it->pageId != page_id) {
@@ -671,9 +671,9 @@ Settings::Impl::getAggregateHardSizeMM(
 			}
 		}
 	}
-	
+
 	double height = 0.0;
-	
+
 	{
 		DescHeightOrder::iterator it(m_descHeightOrder.begin());
 		if (it->pageId != page_id) {
@@ -689,7 +689,7 @@ Settings::Impl::getAggregateHardSizeMM(
 			}
 		}
 	}
-	
+
 	return QSizeF(width, height);
 }
 

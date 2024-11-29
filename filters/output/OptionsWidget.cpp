@@ -63,11 +63,13 @@ OptionsWidget::OptionsWidget(
 
 	depthPerceptionSlider->setMinimum(qRound(DepthPerception::minValue() * 10));
 	depthPerceptionSlider->setMaximum(qRound(DepthPerception::maxValue() * 10));
-	
+
 	colorModeSelector->addItem(tr("Black and White"), ColorParams::BLACK_AND_WHITE);
 	colorModeSelector->addItem(tr("Color / Grayscale"), ColorParams::COLOR_GRAYSCALE);
 	colorModeSelector->addItem(tr("Mixed"), ColorParams::MIXED);
-	
+	colorModeSelector->setCurrentIndex(ColorParams::COLOR_GRAYSCALE);
+    // Start with color mode. That’s what i want.
+
 	darkerThresholdLink->setText(
 		Utils::richTextForLink(darkerThresholdLink->text())
 	);
@@ -75,11 +77,11 @@ OptionsWidget::OptionsWidget(
 		Utils::richTextForLink(lighterThresholdLink->text())
 	);
 	thresholdSlider->setToolTip(QString::number(thresholdSlider->value()));
-	
+
 	updateDpiDisplay();
 	updateColorsDisplay();
 	updateDewarpingDisplay();
-	
+
 	connect(
 		changeDpiButton, SIGNAL(clicked()),
 		this, SLOT(changeDpiButtonClicked())
@@ -156,7 +158,7 @@ OptionsWidget::OptionsWidget(
 		depthPerceptionSlider, SIGNAL(valueChanged(int)),
 		this, SLOT(depthPerceptionChangedSlot(int))
 	);
-	
+
 	thresholdSlider->setMinimum(-50);
 	thresholdSlider->setMaximum(50);
 	thresholLabel->setText(QString::number(thresholdSlider->value()));
@@ -200,7 +202,7 @@ void
 OptionsWidget::distortionModelChanged(dewarping::DistortionModel const& model)
 {
 	m_ptrSettings->setDistortionModel(m_pageId, model);
-	
+
 	// Note that OFF remains OFF while AUTO becomes MANUAL.
 	if (m_dewarpingMode == DewarpingMode::AUTO) {
 		m_ptrSettings->setDewarpingMode(m_pageId, DewarpingMode::MANUAL);
@@ -269,13 +271,13 @@ OptionsWidget::bwThresholdChanged()
 	int const value = thresholdSlider->value();
 	QString const tooltip_text(QString::number(value));
 	thresholdSlider->setToolTip(tooltip_text);
-	
+
 	thresholLabel->setText(QString::number(value));
-	
+
 	if (m_ignoreThresholdChanges) {
 		return;
 	}
-	
+
 	// Show the tooltip immediately.
 	QPoint const center(thresholdSlider->rect().center());
 	QPoint tooltip_pos(thresholdSlider->mapFromGlobal(QCursor::pos()));
@@ -283,7 +285,7 @@ OptionsWidget::bwThresholdChanged()
 	tooltip_pos.setX(qBound(0, tooltip_pos.x(), thresholdSlider->width()));
 	tooltip_pos = thresholdSlider->mapToGlobal(tooltip_pos);
 	QToolTip::showText(tooltip_pos, tooltip_text, thresholdSlider);
-	
+
 	if (thresholdSlider->isSliderDown()) {
 		// Wait for it to be released.
 		// We could have just disabled tracking, but in that case we wouldn't
@@ -301,7 +303,7 @@ OptionsWidget::bwThresholdChanged()
 	m_colorParams.setBlackWhiteOptions(opt);
 	m_ptrSettings->setColorParams(m_pageId, m_colorParams);
 	emit reloadRequested();
-	
+
 	emit invalidateThumbnail(m_pageId);
 }
 
@@ -340,7 +342,7 @@ OptionsWidget::dpiChanged(std::set<PageId> const& pages, Dpi const& dpi)
 		m_ptrSettings->setDpi(page_id, dpi);
 		emit invalidateThumbnail(page_id);
 	}
-	
+
 	if (pages.find(m_pageId) != pages.end()) {
 		m_outputDpi = dpi;
 		updateDpiDisplay();
@@ -355,7 +357,7 @@ OptionsWidget::applyColorsConfirmed(std::set<PageId> const& pages)
 		m_ptrSettings->setColorParams(page_id, m_colorParams);
 		emit invalidateThumbnail(page_id);
 	}
-	
+
 	if (pages.find(m_pageId) != pages.end()) {
 		emit reloadRequested();
 	}
@@ -393,7 +395,7 @@ OptionsWidget::handleDespeckleLevelChange(DespeckleLevel const level)
 
 	bool handled = false;
 	emit despeckleLevelChanged(level, &handled);
-	
+
 	if (handled) {
 		// This means we are on the "Despeckling" tab.
 		emit invalidateThumbnail(m_pageId);
@@ -424,7 +426,7 @@ OptionsWidget::applyDespeckleConfirmed(std::set<PageId> const& pages)
 		m_ptrSettings->setDespeckleLevel(page_id, m_despeckleLevel);
 		emit invalidateThumbnail(page_id);
 	}
-	
+
 	if (pages.find(m_pageId) != pages.end()) {
 		emit reloadRequested();
 	}
@@ -451,11 +453,11 @@ OptionsWidget::dewarpingChanged(std::set<PageId> const& pages, DewarpingMode con
 		m_ptrSettings->setDewarpingMode(page_id, mode);
 		emit invalidateThumbnail(page_id);
 	}
-	
+
 	if (pages.find(m_pageId) != pages.end()) {
 		if (m_dewarpingMode != mode) {
 			m_dewarpingMode = mode;
-			
+
 			// We reload when we switch to auto dewarping, even if we've just
 			// switched to manual, as we don't store the auto-generated distortion model.
 			// We also have to reload if we are currently on the "Fill Zones" tab,
@@ -466,7 +468,7 @@ OptionsWidget::dewarpingChanged(std::set<PageId> const& pages, DewarpingMode con
 			// in Task::UiUpdater::updateUI().  Look for "new DewarpingPointMapper" there.
 			if (mode == DewarpingMode::AUTO || m_lastTab != TAB_DEWARPING) {
 				// Switch to the Output tab after reloading.
-				m_lastTab = TAB_OUTPUT; 
+				m_lastTab = TAB_OUTPUT;
 
 				// These depend on the value of m_lastTab.
 				updateDpiDisplay();
@@ -504,7 +506,7 @@ OptionsWidget::applyDepthPerceptionConfirmed(std::set<PageId> const& pages)
 		m_ptrSettings->setDepthPerception(page_id, m_depthPerception);
 		emit invalidateThumbnail(page_id);
 	}
-	
+
 	if (pages.find(m_pageId) != pages.end()) {
 		emit reloadRequested();
 	}
@@ -538,7 +540,7 @@ OptionsWidget::reloadIfNecessary()
 	dewarping::DistortionModel saved_distortion_model;
 	DepthPerception saved_depth_perception;
 	DespeckleLevel saved_despeckle_level = DESPECKLE_CAUTIOUS;
-	
+
 	std::unique_ptr<OutputParams> output_params(m_ptrSettings->getOutputParams(m_pageId));
 	if (output_params.get()) {
 		saved_picture_zones = output_params->pictureZones();
@@ -597,11 +599,11 @@ void
 OptionsWidget::updateColorsDisplay()
 {
 	colorModeSelector->blockSignals(true);
-	
+
 	ColorParams::ColorMode const color_mode = m_colorParams.colorMode();
 	int const color_mode_idx = colorModeSelector->findData(color_mode);
 	colorModeSelector->setCurrentIndex(color_mode_idx);
-	
+
 	bool color_grayscale_options_visible = false;
 	bool bw_options_visible = false;
 	switch (color_mode) {
@@ -615,7 +617,7 @@ OptionsWidget::updateColorsDisplay()
 			bw_options_visible = true;
 			break;
 	}
-	
+
 	colorGrayscaleOptions->setVisible(color_grayscale_options_visible);
 	if (color_grayscale_options_visible) {
 		ColorGrayscaleOptions const opt(
@@ -625,7 +627,7 @@ OptionsWidget::updateColorsDisplay()
 		equalizeIlluminationCB->setChecked(opt.normalizeIllumination());
 		equalizeIlluminationCB->setEnabled(opt.whiteMargins());
 	}
-	
+
 	modePanel->setVisible(m_lastTab != TAB_DEWARPING);
 	bwOptions->setVisible(bw_options_visible);
 	despecklePanel->setVisible(bw_options_visible && m_lastTab != TAB_DEWARPING);
@@ -651,7 +653,7 @@ OptionsWidget::updateColorsDisplay()
 			m_colorParams.blackWhiteOptions().thresholdAdjustment()
 		);
 	}
-	
+
 	colorModeSelector->blockSignals(false);
 }
 

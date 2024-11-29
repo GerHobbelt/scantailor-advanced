@@ -57,7 +57,7 @@ ImageMetadata::dpiStatus(int pixel_size, int dpi)
 	if (dpi <= 1) {
 		return DPI_UNDEFINED;
 	}
-	
+
 	if (dpi < 150) {
 		return DPI_TOO_SMALL;
 	}
@@ -65,9 +65,9 @@ ImageMetadata::dpiStatus(int pixel_size, int dpi)
 	if (dpi > 9999) {
 		return DPI_TOO_LARGE;
 	}
-	
+
 	double const mm = INCH2MM * pixel_size / dpi;
-	if (mm > 500) {
+	if (mm > 600) {
 		// This may indicate we are working with very large printed materials,
 		// but most likely it indicates the DPI is wrong (too low).
 		// DPIs that are too low may easily cause crashes due to out of memory
@@ -77,6 +77,6 @@ ImageMetadata::dpiStatus(int pixel_size, int dpi)
 		// memory consumption is increased 9 times.
 		return DPI_TOO_SMALL_FOR_THIS_PIXEL_SIZE;
 	}
-	
+
 	return DPI_OK;
 }
