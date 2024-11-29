@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPixmapCache>
 #include <QStyleOptionGraphicsItem>
 #include <cmath>
@@ -180,7 +181,7 @@ void ThumbnailBase::paintDeviant(QPainter& painter) {
   pen.setCosmetic(true);
   painter.setPen(pen);
 
-  QFont font("Serif");
+  QFont font("SF Compact Display");
   font.setWeight(QFont::Bold);
   font.setPixelSize(static_cast<int>(boundingRect().width() / 2));
   painter.setFont(font);
