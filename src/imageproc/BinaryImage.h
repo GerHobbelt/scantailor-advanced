@@ -9,6 +9,7 @@
 #include <QSize>
 #include <cstdint>
 #include <vector>
+#include <stdexcept>
 
 #include "BWColor.h"
 #include "BinaryThreshold.h"

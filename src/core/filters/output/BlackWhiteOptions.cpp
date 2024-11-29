@@ -78,6 +78,8 @@ BinarizationMethod BlackWhiteOptions::parseBinarizationMethod(const QString& str
     return T_GRAD;
   } else if (str == "edgeplus") {
     return T_EDGEPLUS;
+  } else if (str == "sauvolamod") {
+    return SAUVOLAMOD;
   } else if (str == "blurdiv") {
     return T_BLURDIV;
   } else if (str == "edgediv") {
@@ -107,6 +109,9 @@ QString BlackWhiteOptions::formatBinarizationMethod(BinarizationMethod type) {
       break;
     case T_EDGEPLUS:
       str = "edgeplus";
+      break;
+    case SAUVOLAMOD:
+      str = "sauvolamod";
       break;
     case T_BLURDIV:
       str = "blurdiv";

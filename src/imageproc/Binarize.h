@@ -42,6 +42,11 @@ BinaryImage binarizeMokji(const QImage& src, unsigned maxEdgeWidth = 3, unsigned
  */
 BinaryImage binarizeSauvola(const QImage& src, QSize windowSize, double k = 0.34, double delta = 0.0);
 
+
+BinaryImage binarizeSauvolaMod(const QImage& src, QSize windowSize, double k = 0.34);
+
+
+
 /**
  * \brief Image binarization using Wolf's local thresholding method.
  *

@@ -48,6 +48,7 @@ DefaultParamsDialog::DefaultParamsDialog(QWidget* parent)
   thresholdMethodBox->addItem(tr("Otsu"), T_OTSU);
   thresholdMethodBox->addItem(tr("Sauvola"), T_SAUVOLA);
   thresholdMethodBox->addItem(tr("Wolf"), T_WOLF);
+  thresholdMethodBox->addItem(tr("SauvolaMod"), SAUVOLAMOD);
   thresholdMethodBox->addItem(tr("Bradley"), T_BRADLEY);
   thresholdMethodBox->addItem(tr("Grad"), T_GRAD);
   thresholdMethodBox->addItem(tr("EdgePlus"), T_EDGEPLUS);

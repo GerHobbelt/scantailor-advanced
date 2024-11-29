@@ -14,6 +14,7 @@
 #include "OtsuBinarizationOptionsWidget.h"
 #include "PictureZoneComparator.h"
 #include "SauvolaBinarizationOptionsWidget.h"
+#include "SauvolaModBinarizationOptionsWidget.h"
 #include "WolfBinarizationOptionsWidget.h"
 
 using namespace core;
@@ -43,6 +44,7 @@ OptionsWidget::OptionsWidget(std::shared_ptr<Settings> settings, const PageSelec
   thresholdMethodBox->addItem(tr("Sauvola"), T_SAUVOLA);
   thresholdMethodBox->addItem(tr("Wolf"), T_WOLF);
   thresholdMethodBox->addItem(tr("Bradley"), T_BRADLEY);
+  thresholdMethodBox->addItem(tr("SauvolaMod"), SAUVOLAMOD);
   thresholdMethodBox->addItem(tr("Grad"), T_GRAD);
   thresholdMethodBox->addItem(tr("EdgePlus"), T_EDGEPLUS);
   thresholdMethodBox->addItem(tr("BlurDiv"), T_BLURDIV);
@@ -55,6 +57,8 @@ OptionsWidget::OptionsWidget(std::shared_ptr<Settings> settings, const PageSelec
   QPointer<BinarizationOptionsWidget> otsuBinarizationOptionsWidget = new OtsuBinarizationOptionsWidget(m_settings);
   QPointer<BinarizationOptionsWidget> sauvolaBinarizationOptionsWidget
       = new SauvolaBinarizationOptionsWidget(m_settings);
+  QPointer<BinarizationOptionsWidget> sauvolaModBinarizationOptionsWidget
+      = new SauvolaModBinarizationOptionsWidget(m_settings);
   QPointer<BinarizationOptionsWidget> wolfBinarizationOptionsWidget = new WolfBinarizationOptionsWidget(m_settings);
   QPointer<BinarizationOptionsWidget> bradleyBinarizationOptionsWidget
       = new SauvolaBinarizationOptionsWidget(m_settings);
@@ -73,6 +77,7 @@ OptionsWidget::OptionsWidget(std::shared_ptr<Settings> settings, const PageSelec
   addBinarizationOptionsWidget(sauvolaBinarizationOptionsWidget);
   addBinarizationOptionsWidget(wolfBinarizationOptionsWidget);
   addBinarizationOptionsWidget(bradleyBinarizationOptionsWidget);
+  addBinarizationOptionsWidget(sauvolaModBinarizationOptionsWidget);
   addBinarizationOptionsWidget(gradBinarizationOptionsWidget);
   addBinarizationOptionsWidget(edgeplusBinarizationOptionsWidget);
   addBinarizationOptionsWidget(blurdivBinarizationOptionsWidget);

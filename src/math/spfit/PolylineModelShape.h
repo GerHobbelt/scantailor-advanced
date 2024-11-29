@@ -6,6 +6,7 @@
 
 #include <QPointF>
 #include <vector>
+#include <stdexcept>
 
 #include "FlagOps.h"
 #include "ModelShape.h"

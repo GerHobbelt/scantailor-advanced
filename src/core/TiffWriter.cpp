@@ -222,8 +222,10 @@ bool TiffWriter::writeBitonalOrIndexed8Image(const TiffHandle& tif, const QImage
   }
 
   if (image.format() == QImage::Format_Indexed8) {
-    TIFFSetField(tif.handle(), TIFFTAG_COMPRESSION,
+    uint16 compress = (photometric == PHOTOMETRIC_PALETTE) ?
+                      COMPRESSION_LZW :
                  uint16_t(ApplicationSettings::getInstance().getTiffColorCompression()));
+    TIFFSetField(tif.handle(), TIFFTAG_COMPRESSION, compress);
   } else {
     TIFFSetField(tif.handle(), TIFFTAG_COMPRESSION,
                  uint16_t(ApplicationSettings::getInstance().getTiffBwCompression()));

@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <vector>
+#include <stdexcept>
 
 class QRect;
 

@@ -29,6 +29,7 @@ ZoneInteractionContext::ZoneInteractionContext(ImageViewBase& imageView, Editabl
       m_contextMenuInteractionCreator(
           boost::bind(&ZoneInteractionContext::createStdContextMenuInteraction, this, boost::placeholders::_1)),
       m_showPropertiesCommand(&ZoneInteractionContext::showPropertiesStub),
+      //m_zoneCreationMode(ZoneCreationMode::POLYGONAL) {}
       m_zoneCreationMode(ZoneCreationMode::RECTANGULAR) {}
 
 ZoneInteractionContext::~ZoneInteractionContext() = default;

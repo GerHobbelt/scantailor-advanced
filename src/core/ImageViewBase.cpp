@@ -156,6 +156,17 @@ ImageViewBase::ImageViewBase(const QImage& image,
 
   if (ApplicationSettings::getInstance().isOpenGlEnabled()) {
     if (OpenGLSupport::supported()) {
+      //QGLFormat format;
+      //format.setSampleBuffers(true);
+      //format.setStencil(true);
+      //format.setAlpha(true);
+      //format.setRgba(true);
+      //format.setDepth(false);
+
+      // Most of hardware refuses to work for us with direct rendering enabled.
+      //format.setDirectRendering(false);
+
+      //setViewport(new QGLWidget(format));
       setViewport(new QOpenGLWidget());
     }
   }

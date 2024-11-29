@@ -1215,7 +1215,9 @@ void MainWindow::filterResult(const BackgroundTaskPtr& task, const FilterResultP
 
       QApplication::alert(this);  // Flash the taskbar entry.
       if (m_checkBeepWhenFinished()) {
-#if defined(Q_OS_UNIX)
+#if defined(Q_OS_MACOS)
+        QString extPlayCmd("afplay /System/Library/Sounds/Glass.aiff");
+#elif defined(Q_OS_UNIX)
         QString extPlayCmd("play /usr/share/sounds/freedesktop/stereo/bell.oga");
 #else
         QString extPlayCmd;

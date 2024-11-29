@@ -102,6 +102,84 @@ BinaryImage binarizeSauvola(const QImage& src, const QSize windowSize, const dou
   return bwImg;
 }  // binarizeSauvola
 
+BinaryImage binarizeSauvolaMod(const QImage& src, const QSize windowSize, const double k) {
+  if (windowSize.isEmpty()) {
+    throw std::invalid_argument("binarizeSauvola: invalid windowSize");
+  }
+
+  if (src.isNull()) {
+    return BinaryImage();
+  }
+
+  const QImage gray(toGrayscale(src));
+  const int w = gray.width();
+  const int h = gray.height();
+
+  IntegralImage<uint32_t> integralImage(w, h);
+  IntegralImage<uint64_t> integralSqimage(w, h);
+
+  const uint8_t* grayLine = gray.bits();
+  const int grayBpl = gray.bytesPerLine();
+
+  for (int y = 0; y < h; ++y, grayLine += grayBpl) {
+    integralImage.beginRow();
+    integralSqimage.beginRow();
+    for (int x = 0; x < w; ++x) {
+      const uint32_t pixel = grayLine[x];
+      integralImage.push(pixel);
+      integralSqimage.push(pixel * pixel);
+    }
+  }
+
+  const int windowLowerHalf = windowSize.height() >> 1;
+  const int windowUpperHalf = windowSize.height() - windowLowerHalf;
+  const int windowLeftHalf = windowSize.width() >> 1;
+  const int windowRightHalf = windowSize.width() - windowLeftHalf;
+
+  BinaryImage bwImg(w, h);
+  uint32_t* bwLine = bwImg.data();
+  const int bwWpl = bwImg.wordsPerLine();
+
+  grayLine = gray.bits();
+  for (int y = 0; y < h; ++y) {
+    const int top = std::max(0, y - windowLowerHalf);
+    const int bottom = std::min(h, y + windowUpperHalf);  // exclusive
+    for (int x = 0; x < w; ++x) {
+      const int left = std::max(0, x - windowLeftHalf);
+      const int right = std::min(w, x + windowRightHalf);  // exclusive
+      const int area = (bottom - top) * (right - left);
+      assert(area > 0);  // because windowSize > 0 and w > 0 and h > 0
+      const QRect rect(left, top, right - left, bottom - top);
+      const double windowSum = integralImage.sum(rect);
+      const double windowSqsum = integralSqimage.sum(rect);
+
+      const double rArea = 1.0 / area;
+      const double mean = windowSum * rArea;
+      const double sqmean = windowSqsum * rArea;
+
+      const double variance = sqmean - mean * mean;
+      const double deviation = std::sqrt(std::fabs(variance));
+
+      const double threshold = mean * (1.0 + k * (deviation / 128.0 - 1.0));
+
+      const uint32_t msb = uint32_t(1) << 31;
+      const uint32_t mask = msb >> (x & 31);
+      if (int(grayLine[x]) < threshold) {
+        // black
+        bwLine[x >> 5] |= mask;
+      } else {
+        // white
+        bwLine[x >> 5] &= ~mask;
+      }
+    }
+
+    grayLine += grayBpl;
+    bwLine += bwWpl;
+  }
+  return bwImg;
+}  // binarizeSauvolaMod
+
+
 BinaryImage binarizeWolf(const QImage& src,
                          const QSize windowSize,
                          const unsigned char lowerBound,

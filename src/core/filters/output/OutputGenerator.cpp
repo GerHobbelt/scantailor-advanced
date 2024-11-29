@@ -2361,6 +2361,13 @@ BinaryImage OutputGenerator::Processor::binarize(const QImage& image) const {
       binarized = binarizeEdgeDiv(image, windowsSize, thresholdCoef, thresholdCoef, thresholdDelta);
       break;
     }
+    case SAUVOLAMOD: {
+      QSize windowsSize = QSize(blackWhiteOptions.getWindowSize(), blackWhiteOptions.getWindowSize());
+      double sauvolaCoef = blackWhiteOptions.getSauvolaCoef();
+
+      binarized = binarizeSauvolaMod(image, windowsSize, sauvolaCoef);
+      break;
+    }
   }
   return binarized;
 }
