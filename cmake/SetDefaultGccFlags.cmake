@@ -7,7 +7,18 @@ MACRO(ST_SET_DEFAULT_GCC_FLAGS)
 		SET(gc_sections_cflags_ "")
 		SET(gc_sections_ldflags_ "")
 		SET(no_inline_dllexport_cflags_ "")
-		
+		SET(cpp11_flags_ "")
+
+		CHECK_CXX_ACCEPTS_FLAG(
+				"-std=c++11"
+				cpp11_support_
+		)
+		IF(cpp11_support_)
+			SET(cpp11_flags_ "-std=c++11")
+		ENDIF(cpp11_support_)
+
+		MESSAGE( STATUS "Current CPP11 support: " ${cpp11_support_} )
+
 		CHECK_CXX_ACCEPTS_FLAG(
 			"-ffunction-sections -fdata-sections -Wl,--gc-sections"
 			gc_sections_supported_
@@ -53,15 +64,21 @@ MACRO(ST_SET_DEFAULT_GCC_FLAGS)
 			SET(default_flags_ "-Wall -Wno-unused -ffast-math ${no_inline_dllexport_cflags_}")
 			# Flags common for all build configurations.
 			SET(
-				CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${default_flags_}"
+				CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${default_flags_} ${cpp11_flags_}"
 				CACHE STRING "Common C flags for all build configurations." FORCE
 			)
+			# the compiler flags for compiling C sources
+			MESSAGE( STATUS "Current CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS} )
+
 			SET(
 				CMAKE_CXX_FLAGS
-				"${CMAKE_CXX_FLAGS} ${default_flags_} ${stdlibs_shared_static_}"
+				"${CMAKE_CXX_FLAGS} ${default_flags_} ${stdlibs_shared_static_} ${cpp11_flags_}"
 				CACHE STRING "Common C++ flags for all build configurations." FORCE
 			)
-		
+
+			# the compiler flags for compiling C++ sources
+			MESSAGE( STATUS "Current CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
+
 			# Release
 			SET(
 				CMAKE_C_FLAGS_RELEASE

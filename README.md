@@ -1,9 +1,8 @@
-# Scan Tailor - [scantailor.org](http://scantailor.org/)
+# Scan Tailor F ![](https://travis-ci.com/OrelSokolov/scantailor.svg?branch=master)
 
-![ScanTailor logo from scantailor.org](http://scantailor.org/assets/logo_h300-fs8.png)
+![ScanTailor logo from scantailor.org](https://raw.githubusercontent.com/OrelSokolov/scantailor/master/github_logo.png)
 
-# This project is no longer maintained, and has not been maintained for a while. 
-
+# This is fork from original project
 
 ## About ##
 
