@@ -40,12 +40,13 @@ void StatusBarPanel::updatePage(int pageNumber, size_t pageCount, const PageId& 
   ui.pageNoLabel->setText(tr("p. %1 / %2").arg(pageNumber).arg(pageCount));
   ui.pageNoLabel->setVisible(true);
 
+  const int maxNameLength = 20;
   QString pageFileInfo = QFileInfo(pageId.imageId().filePath()).completeBaseName();
-  if (pageFileInfo.size() > 15) {
-    pageFileInfo = "..." + pageFileInfo.right(13);
+  if (pageFileInfo.size() > maxNameLength) {
+    pageFileInfo = "..." + pageFileInfo.right(maxNameLength - 2);
   }
   if (pageId.subPage() != PageId::SINGLE_PAGE) {
-    pageFileInfo = pageFileInfo.right(11) + ((pageId.subPage() == PageId::LEFT_PAGE) ? tr(" [L]") : tr(" [R]"));
+    pageFileInfo = pageFileInfo.right(maxNameLength - 4) + ((pageId.subPage() == PageId::LEFT_PAGE) ? tr(" [L]") : tr(" [R]"));
   }
 
   ui.pageInfoLine->setVisible(true);
@@ -132,7 +133,7 @@ void StatusBarPanel::physSizeChanged() {
     }
 
     ui.physSizeLine->setVisible(true);
-    ui.physSizeLabel->setText(QString("%1 x %2 %3").arg(width).arg(height).arg(unitsToLocalizedString(units)));
+    ui.physSizeLabel->setText(QString("%1 x %2 %3, DPI %4").arg(width).arg(height).arg(unitsToLocalizedString(units)).arg(m_dpi.horizontal()));
     ui.physSizeLabel->setVisible(true);
   } else {
     clearAndHideLabel(ui.physSizeLabel);
