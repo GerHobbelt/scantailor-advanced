@@ -46,6 +46,9 @@
 #include <set>
 #include <QList>
 
+#include <chrono>
+#include <iostream>
+
 class AbstractFilter;
 class AbstractRelinker;
 class ThumbnailPixmapCache;
