@@ -44,6 +44,8 @@
 #include <Qt>
 #include <QDebug>
 
+#include <iostream>
+
 namespace output
 {
 
@@ -262,6 +264,7 @@ OptionsWidget::setNeutralThreshold()
 void
 OptionsWidget::bwThresholdChanged()
 {
+	std::cout << "bwThresholdChanged()" << std::endl;
 	int const value = thresholdSlider->value();
 	QString const tooltip_text(QString::number(value));
 	thresholdSlider->setToolTip(tooltip_text);

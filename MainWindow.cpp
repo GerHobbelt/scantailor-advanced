@@ -1652,6 +1652,8 @@ MainWindow::getCurrentView() const
 void
 MainWindow::updateMainArea()
 {
+	auto start = std::chrono::system_clock::now();
+
 	if (m_ptrPages->numImages() == 0) {
 		filterList->setBatchProcessingPossible(false);
 		showNewOpenProjectPanel();
@@ -1670,6 +1672,10 @@ MainWindow::updateMainArea()
 			loadPageInteractive(page);
 		}
 	}
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "MainWindow::updateMainArea(): " << elapsed.count() << "s" << std::endl;
 }
 
 bool
